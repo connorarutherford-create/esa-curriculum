@@ -484,7 +484,29 @@ function addUnit() {
 
 // --- AI Generation ---
 function generateWithAI() {
-    if (!proEnabled) { document.getElementById('proSection').scrollIntoView({ behavior: 'smooth' }); return; }
+    if (!proEnabled) {
+        // Show inline activation prompt right where they are
+        const key = prompt('Enter your ESA Curriculum Pro license key\n(Purchase at gumroad.com/l/esa-curriculum-pro)\n\nAfter buying, find your key in the Gumroad receipt email.');
+        if (!key) return;
+        // Try to activate
+        fetch('https://api.gumroad.com/v2/licenses/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'product_id=' + encodeURIComponent('HF9Pm7TTWGckNpQQJfenw==') + '&license_key=' + encodeURIComponent(key)
+        }).then(r => r.json()).then(data => {
+            if (data.success && data.purchase && !data.purchase.refunded) {
+                proEnabled = true;
+                localStorage.setItem('esa_pro_license', 'true');
+                document.getElementById('proStatus').style.display = 'none';
+                document.getElementById('proActive').style.display = 'block';
+                // Retry AI generation
+                generateWithAI();
+            } else {
+                alert('Invalid license key. Check your Gumroad receipt or purchase at gumroad.com/l/esa-curriculum-pro');
+            }
+        }).catch(() => alert('Could not verify license.'));
+        return;
+    }
     const subj = document.getElementById('subject').value;
     if (!subj) { alert('Select a subject first.'); return; }
     let apiKey = localStorage.getItem('esa_gemini_key');
