@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESA Curriculum Generator — Inkwell Digital</title>
+    <title>ESA Parent-Provided Curriculum Builder — Inkwell Digital</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -13,15 +13,6 @@
             line-height: 1.6;
         }
         .container { max-width: 720px; margin: 0 auto; padding: 2rem; }
-        .badge {
-            display: inline-block;
-            font-size: 12px; font-weight: 700;
-            background: rgba(59,130,246,0.12);
-            border: 1px solid rgba(59,130,246,0.2);
-            color: #60a5fa;
-            padding: 6px 14px; border-radius: 20px;
-            letter-spacing: 0.4px; margin-bottom: 2rem;
-        }
         h1 {
             font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 800; line-height: 1.1;
@@ -39,31 +30,18 @@
             margin-bottom: 2rem; max-width: 560px;
             line-height: 1.7;
         }
-        .divider {
-            height: 1px;
-            background: rgba(255,255,255,0.06);
-            margin: 2.5rem 0;
-        }
-        h2 {
-            font-size: 1.2rem; font-weight: 700;
-            margin-bottom: 1.2rem;
-        }
+        .divider { height: 1px; background: rgba(255,255,255,0.06); margin: 2.5rem 0; }
+        h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.2rem; }
         .form-section {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 1.5rem;
+            border-radius: 16px; padding: 24px; margin-bottom: 1.5rem;
         }
-        .form-section h3 {
-            font-size: 1rem; font-weight: 600;
-            margin-bottom: 1rem; color: #b4b4cc;
-        }
+        .form-section h3 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #b4b4cc; }
         .form-group { margin-bottom: 1.2rem; }
         .form-group label {
             display: block; font-size: 0.88rem;
-            font-weight: 500; color: #9a9ab0;
-            margin-bottom: 0.3rem;
+            font-weight: 500; color: #9a9ab0; margin-bottom: 0.3rem;
         }
         .form-group input, .form-group select, .form-group textarea {
             width: 100%; font-family: inherit;
@@ -94,13 +72,9 @@
         .btn-secondary {
             background: rgba(255,255,255,0.06);
             border: 1px solid rgba(255,255,255,0.1);
-            color: #b4b4cc;
+            color: #b4b4cc; width: 100%;
         }
         .btn-secondary:hover { background: rgba(255,255,255,0.1); }
-        .btn-success {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            color: #fff; width: 100%;
-        }
         .output-section {
             display: none;
             background: rgba(34,197,94,0.04);
@@ -112,7 +86,7 @@
         .output-content {
             font-family: 'Georgia', 'Times New Roman', serif;
             font-size: 0.95rem; color: #d4d4e0;
-            line-height: 1.7; padding: 20px;
+            line-height: 1.7; padding: 24px;
             background: #0d0d18; border-radius: 10px;
             margin-bottom: 1rem; white-space: pre-wrap;
         }
@@ -126,6 +100,28 @@
         .scan-result.visible { display: block; }
         .scan-result .item { font-size: 0.9rem; padding: 4px 0; color: #b4b4cc; }
         .scan-result .item span { color: #e4e4ec; font-weight: 600; }
+        .items-list { margin-bottom: 1.2rem; }
+        .item-entry {
+            display: flex; gap: 8px; align-items: center;
+            margin-bottom: 8px;
+        }
+        .item-entry input { flex: 1; }
+        .item-entry textarea { flex: 1; min-height: 50px; font-size: 0.85rem; }
+        .remove-item {
+            background: rgba(239,68,68,0.15);
+            border: 1px solid rgba(239,68,68,0.2);
+            color: #f87171;
+            border-radius: 8px; padding: 8px 12px;
+            cursor: pointer; font-size: 0.85rem;
+        }
+        .add-item {
+            background: rgba(59,130,246,0.1);
+            border: 1px dashed rgba(59,130,246,0.25);
+            color: #60a5fa;
+            border-radius: 10px; padding: 10px;
+            cursor: pointer; font-size: 0.88rem;
+            text-align: center; width: 100%;
+        }
         .faq { margin-bottom: 2rem; }
         .faq-q { font-weight: 600; margin-top: 1.2rem; margin-bottom: 0.3rem; font-size: 0.93rem; }
         .faq-a { font-size: 0.88rem; color: #8b8ba3; }
@@ -142,33 +138,26 @@
 <div class="container">
 
     <img src="https://connorarutherford-create.github.io/inkwell-digital/logo-ink.svg" alt="Inkwell Digital" style="height: 32px; margin-bottom: 2rem;">
-    <h1>Write your <em>Parent-Provided Curriculum</em> in minutes</h1>
-    <p class="subtitle">Upload a receipt, paste receipt text, or fill in the form — we generate the curriculum justification that meets AZ Department of Education standards.</p>
+    <h1>Build your <em>Parent-Provided Curriculum</em></h1>
+    <p class="subtitle">Fill in what you bought and what your student is studying. We'll generate a complete PPC that meets Arizona ESA standards — ready to submit.</p>
 
     <div class="divider"></div>
 
-    <h2>Scan a receipt</h2>
-    <p class="subtitle" style="margin-bottom:1.5rem; font-size:0.95rem;">Paste your receipt text and we'll extract vendor, items, and total — then auto-fill the form below.</p>
+    <h2>Scan a Receipt</h2>
+    <p style="font-size:0.9rem; color:#8b8ba3; margin-bottom:1rem;">Paste receipt text and we'll extract vendor and total to auto-fill the form below.</p>
     <div class="form-section">
-        <h3>Paste Receipt Text</h3>
-        <div class="form-group">
-            <label>Copy and paste your receipt here</label>
-            <textarea id="receiptText" placeholder="Walmart
+        <textarea id="receiptText" placeholder="Paste receipt text here...
+
+Example:
+Walmart
 123 Main St
-Date: 03/15/2025
+03/15/2025
 
 Desk           149.99
-Desk Lamp       24.99
 Pencils 12pk     3.49
 
-Subtotal       178.47
-Tax             14.28
-Total         $192.75
-Visa **** 1234" style="min-height:160px; font-family: 'Courier New', monospace; font-size: 0.88rem;"></textarea>
-        </div>
-        <button class="btn btn-primary" onclick="scanReceipt()">Scan Receipt</button>
-        <p style="font-size:0.82rem; color:#6b6b83; margin-top:0.5rem;">We'll extract the vendor, items, and total automatically.</p>
-
+Total         $153.48" style="min-height:120px; font-family: 'Courier New', monospace; font-size: 0.88rem;"></textarea>
+        <button class="btn btn-primary" onclick="scanReceipt()" style="margin-top:12px;">Scan Receipt</button>
         <div class="scan-result" id="scanResult">
             <p style="font-size:0.9rem; font-weight:600; margin-bottom:8px;">&#9989; Receipt scanned</p>
             <div id="scanDetails"></div>
@@ -177,14 +166,13 @@ Visa **** 1234" style="min-height:160px; font-family: 'Courier New', monospace; 
 
     <div class="divider"></div>
 
-    <h2>Build your curriculum</h2>
-    <p class="subtitle" style="margin-bottom:1.5rem; font-size:0.95rem;">Fill in the student details and what you're purchasing. We'll generate a complete curriculum document.</p>
+    <h2>Curriculum Details</h2>
 
     <div class="form-section">
-        <h3>Student Information</h3>
+        <h3>Student</h3>
         <div class="row">
             <div class="form-group">
-                <label>Student name</label>
+                <label>Full name</label>
                 <input type="text" id="studentName" placeholder="First and last name">
             </div>
             <div class="form-group">
@@ -195,84 +183,144 @@ Visa **** 1234" style="min-height:160px; font-family: 'Courier New', monospace; 
     </div>
 
     <div class="form-section">
-        <h3>Curriculum Details</h3>
+        <h3>Course Info</h3>
+        <div class="form-group">
+            <label>Course title</label>
+            <input type="text" id="courseTitle" placeholder="e.g., Sustainable Chemistry &amp; Environmental Stewardship">
+        </div>
         <div class="row">
             <div class="form-group">
                 <label>Subject</label>
                 <select id="subject">
-                    <option value="">Select subject...</option>
+                    <option value="">Select...</option>
                     <option value="Reading">Reading</option>
                     <option value="Grammar">Grammar</option>
                     <option value="Mathematics">Mathematics</option>
                     <option value="Science">Science</option>
+                    <option value="Environmental Science">Environmental Science</option>
                     <option value="Social Studies">Social Studies</option>
                     <option value="Art">Art</option>
                     <option value="Music">Music</option>
-                    <option value="Physical Education">Physical Education</option>
+                    <option value="Physical Education">PE</option>
                     <option value="Foreign Language">Foreign Language</option>
+                    <option value="Library Science">Library Science</option>
+                    <option value="Life Skills">Life Skills</option>
                     <option value="Other">Other</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Grade level</label>
+                <label>Grade</label>
                 <select id="grade">
-                    <option value="">Select grade...</option>
+                    <option value="">Select...</option>
                     <option value="PK">PK</option>
                     <option value="K">K</option>
                     <option value="1">1</option><option value="2">2</option><option value="3">3</option>
                     <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-                    <option value="7">7</option><option value="8">8</option><option value="9">9</option>
-                    <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                    <option value="7">7</option><option value="8">8</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Duration</label>
+                <select id="duration">
+                    <option value="">Select...</option>
+                    <option value="4 Weeks">4 weeks</option>
+                    <option value="6 Weeks">6 weeks</option>
+                    <option value="8 Weeks">8 weeks</option>
+                    <option value="12 Weeks">12 weeks</option>
+                    <option value="Semester">Semester</option>
+                    <option value="Full Year">Full Year</option>
                 </select>
             </div>
         </div>
+    </div>
 
+    <div class="form-section">
+        <h3>Scope of Study</h3>
         <div class="form-group">
-            <label>Item(s) purchased</label>
-            <input type="text" id="purchaseItem" placeholder="e.g., Desk, art supplies">
+            <label>Description of the course (what will your student learn?)</label>
+            <textarea id="scopeOfStudy" placeholder="e.g., This unit explores the science of sustainable food preservation. The student will investigate the physical and chemical properties of natural materials..." style="min-height:100px;"></textarea>
         </div>
-
         <div class="form-group">
-            <label>Vendor</label>
-            <input type="text" id="vendor" placeholder="Amazon, Staples, etc.">
-        </div>
-
-        <div class="form-group">
-            <label>Amount ($)</label>
-            <input type="text" id="amount" placeholder="0.00">
-        </div>
-
-        <div class="form-group">
-            <label>Why is this educationally necessary? (optional)</label>
-            <textarea id="justification" placeholder="e.g., This desk provides a dedicated workspace for focused study..."></textarea>
-        </div>
-
-        <div class="form-group">
-            <label>Custom learning objective (optional — leave blank for auto-generated)</label>
-            <textarea id="learningObjective" placeholder="We'll write one based on your subject and purchase"></textarea>
+            <label>Learning objectives (one per line)</label>
+            <textarea id="objectives" placeholder="Human Impact on Earth Systems: Analyzing how reducing single-use plastics mitigates ocean pollution.
+Properties of Matter: Studying the antimicrobial properties of beeswax and how heat alters the state of waxes.
+Life Science: Exploring the role of honeybees in the ecosystem." style="min-height:100px;"></textarea>
         </div>
     </div>
 
-    <button class="btn btn-success" onclick="generateCurriculum()">&#9889; Generate Curriculum</button>
+    <div class="form-section">
+        <h3>Materials &amp; Justification</h3>
+        <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:1rem;">List each item and explain why it's needed for this course.</p>
+        <div id="materialsContainer">
+            <div class="item-entry">
+                <input type="text" id="matName0" placeholder="Item name" style="flex:1;">
+                <input type="text" id="matPrice0" placeholder="Price" style="width:80px;">
+                <textarea id="matWhy0" placeholder="Why is this educationally necessary?" style="flex:2; min-height:50px; font-size:0.85rem;"></textarea>
+            </div>
+        </div>
+        <div class="add-item" onclick="addMaterialRow()">+ Add another item</div>
+    </div>
+
+    <div class="form-section">
+        <h3>Weekly / Unit Lesson Plan</h3>
+        <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:1rem;">Describe what you'll do each week or unit.</p>
+        <div id="unitsContainer">
+            <div class="unit-entry" data-unit="1">
+                <div class="form-group">
+                    <label>Unit 1 title</label>
+                    <input type="text" class="unit-title" placeholder="e.g., The Plastic Crisis &amp; Alternatives">
+                </div>
+                <div class="form-group">
+                    <label>Weeks</label>
+                    <input type="text" class="unit-weeks" placeholder="e.g., Weeks 1-3">
+                </div>
+                <div class="form-group">
+                    <label>Objective &amp; Activities</label>
+                    <textarea class="unit-activities" placeholder="Describe the objective and activities for this unit." style="min-height:60px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Goal / Task</label>
+                    <input type="text" class="unit-goal" placeholder="e.g., Create shelf labels for the bookcase">
+                </div>
+            </div>
+        </div>
+        <div class="add-item" onclick="addUnitRow()">+ Add another unit</div>
+    </div>
+
+    <div class="form-section">
+        <h3>Justification</h3>
+        <div class="form-group">
+            <label>Why is this course necessary for your homeschool?</label>
+            <textarea id="homeschoolJustification" placeholder="e.g., Executive Function: Managing a physical library requires planning, categorization, and maintenance — all core skills for independent learners..." style="min-height:80px;"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Resources / links (optional)</label>
+            <input type="text" id="resourceLinks" placeholder="e.g., https://www.youtube.com/watch?v=...">
+        </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="generateWithAI()" style="background:linear-gradient(135deg, #a855f7, #8b5cf6); margin-bottom:12px;">&#9889; Generate with AI</button>
+    <p style="font-size:0.82rem; color:#6b6b83; margin-top:0.5rem; margin-bottom:1.5rem;">AI generates the scope, objectives, lesson plans, and justification. Fill in what you can and let AI handle the rest.</p>
+    <hr style="border-color:rgba(255,255,255,0.06); margin:1rem 0;">
+    <button class="btn btn-primary" onclick="generateCurriculum()" style="background:linear-gradient(135deg, #22c55e, #16a34a); margin-top:12px;">Compile PPC</button>
 
     <div class="output-section" id="outputSection">
-        <h2 style="margin-bottom: 0.5rem;">Your Curriculum</h2>
-        <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:1rem;">Copy this into the AZ DOE form or print it.</p>
+        <h2 style="margin-bottom: 0.5rem;">Your Parent-Provided Curriculum</h2>
+        <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:1rem;">Copy this into a Google Doc or print it for your records.</p>
         <div class="output-content" id="outputContent"></div>
         <button class="btn btn-secondary" onclick="copyOutput()">&#128203; Copy to Clipboard</button>
         <button class="btn btn-secondary" style="margin-top:8px;" onclick="printOutput()">&#128424; Print</button>
     </div>
 
     <div class="divider"></div>
-
     <div class="faq">
-        <h2 style="margin-bottom: 0.5rem;">How it works</h2>
+        <h2 style="margin-bottom: 0.5rem;">About PPCs</h2>
         <div class="faq-q">What is a Parent-Provided Curriculum?</div>
-        <div class="faq-a">Arizona ESA parents must submit a curriculum showing why their purchases meet AZ DOE criteria. Required for all purchases beyond auto-approved items.</div>
-        <div class="faq-q">Do I still need to submit receipts?</div>
-        <div class="faq-a">Yes. This generates the curriculum justification. Receipts still go through ClassWallet. The curriculum supports your receipts with an educational rationale.</div>
-        <div class="faq-q">Is this approved by AZ DOE?</div>
-        <div class="faq-a">This tool formats your curriculum following the official template. You are responsible for accuracy.</div>
+        <div class="faq-a">A document Arizona ESA parents submit showing why their purchases meet educational criteria. Required for purchases beyond auto-approved items.</div>
+        <div class="faq-q">What happens if it's rejected?</div>
+        <div class="faq-a">There is no formal "rejection" process — the PPC is submitted with your receipt documentation. A clear, detailed PPC protects you in the case of an audit.</div>
+        <div class="faq-q">Is there an official template?</div>
+        <div class="faq-a">The AZ DOE provides a simple fillable form with 6 fields, but the community has developed more thorough formats like this one. The more detail you provide, the stronger your documentation.</div>
     </div>
 
     <div class="divider"></div>
@@ -280,205 +328,251 @@ Visa **** 1234" style="min-height:160px; font-family: 'Courier New', monospace; 
 </div>
 
 <script>
-// ─── Learning Objective Library ────────────────────────────────────────────
-const learningObjectives = {
-    'Mathematics': {
-        'K': 'Develop foundational number sense, counting, and basic operations through hands-on activities and manipulatives.',
-        '1': 'Build fluency in addition and subtraction within 20, understand place value, and measure and compare lengths.',
-        '2': 'Develop fluency in addition and subtraction within 100, understand place value to 1,000, and work with time and money.',
-        '3': 'Multiply and divide within 100, develop understanding of fractions, and solve problems involving area and perimeter.',
-        '4': 'Use place value understanding to perform multi-digit arithmetic, develop fraction equivalence, and classify geometric figures.',
-        '5': 'Perform operations with multi-digit whole numbers and decimals to hundredths, develop understanding of fractions as division.',
-        '6': 'Reason about ratios and rates, complete operations with fractions and decimals, and understand rational numbers and expressions.',
-        '7': 'Develop understanding of proportional relationships, operations with rational numbers, and work with expressions and linear equations.',
-        '8': 'Understand functions, analyze two- and three-dimensional space using distance, angle, and transformations.',
-    },
-    'Reading': {
-        'K': 'Develop phonemic awareness, letter recognition, and foundational reading skills through guided practice and decodable texts.',
-        '1': 'Build decoding skills, reading fluency, and comprehension of grade-level literary and informational texts.',
-        '2': 'Read with sufficient accuracy and fluency, determine central messages, and describe how characters respond.',
-        '3': 'Read and comprehend literary and informational texts at grade level, determine main ideas, and explain text structure.',
-        '4': 'Refer to details in texts, determine themes, and integrate information from multiple sources.',
-        '5': 'Quote accurately from texts, analyze characters and setting, and compare text structures.',
-        '6': 'Cite textual evidence, analyze plot development, and determine an author\'s point of view.',
-        '7': 'Analyze how story elements interact, trace argument development, and compare media representations.',
-        '8': 'Analyze how dialogue and incidents propel action, evaluate arguments, and analyze point of view.',
-    },
-    'Science': {
-        'K': 'Explore the natural world through observation and inquiry, including plants, animals, weather, and physical properties.',
-        '1': 'Investigate patterns in the natural world, including life cycles, sound and light, and the sun-moon-star patterns.',
-        '2': 'Examine how living things grow, explore states of matter, and understand earth\'s natural processes.',
-        '3': 'Investigate forces and motion, explore ecosystems and life cycles, and study weather and climate patterns.',
-        '4': 'Explore energy transfer, study earth\'s systems, and investigate plant and animal structures.',
-        '5': 'Understand matter and its interactions, study the flow of energy through ecosystems, and explore space systems.',
-    },
-    'Social Studies': {
-        'K': 'Develop awareness of self, family, and community through exploration of roles, responsibilities, and cultural traditions.',
-        '1': 'Explore maps and geography, learn about historical figures and events, and understand civic responsibilities.',
-        '2': 'Study how communities develop, explore economic concepts, and learn about government structures.',
-        '3': 'Investigate Arizona history, geography, and government, and develop map skills and historical thinking.',
-        '4': 'Explore United States geography, early American history through the Revolution, and foundational civic principles.',
-        '5': 'Study the development of the United States from the Constitution through Reconstruction.',
-    },
-    'Art': {
-        'K': 'Explore color, shape, and texture through drawing, painting, and sculpture to develop creative expression.',
-        '1': 'Identify and use the elements of art — line, shape, color, and texture — in original works.',
-        '2': 'Apply knowledge of color theory, pattern, and balance to create artworks that communicate personal expression.',
-        '3': 'Experiment with art materials and techniques to create works demonstrating skill and creativity.',
-        '4': 'Explore the principles of design through multi-step art projects.',
-        '5': 'Create artworks reflecting observation, imagination, and personal experience using advanced techniques.',
-    },
-    'Grammar': {
-        'K': 'Recognize letters, understand sentences, and use capitalization and punctuation in simple writing.',
-        '1': 'Use complete sentences, capitalize dates and names, use ending punctuation.',
-        '2': 'Use collective nouns, past tense verbs, adjectives, and produce simple compound sentences.',
-        '3': 'Use parts of speech correctly, produce simple and compound sentences, and use commas.',
-        '4': 'Use relative pronouns and adverbs, produce complete sentences, and use commas and quotation marks.',
-    },
-    'Other': {
-        'default': 'Develop knowledge and skills in the selected subject area through structured lessons, hands-on activities, and applied practice aligned with Arizona academic standards.',
-    }
-};
+let matCount = 1;
+let unitCount = 1;
 
-function getObjective(subject, grade) {
-    if (subject && learningObjectives[subject]) {
-        if (learningObjectives[subject][grade]) return learningObjectives[subject][grade];
-        if (learningObjectives[subject]['default']) return learningObjectives[subject]['default'];
-    }
-    return `Develop foundational knowledge and skills in ${(subject || 'this subject').toLowerCase()} through guided instruction, hands-on activities, and practice aligned with Arizona academic standards.`;
+function addMaterialRow() {
+    const container = document.getElementById('materialsContainer');
+    const div = document.createElement('div');
+    div.className = 'item-entry';
+    div.innerHTML = `
+        <input type="text" id="matName${matCount}" placeholder="Item name" style="flex:1;">
+        <input type="text" id="matPrice${matCount}" placeholder="Price" style="width:80px;">
+        <textarea id="matWhy${matCount}" placeholder="Why is this educationally necessary?" style="flex:2; min-height:50px; font-size:0.85rem;"></textarea>
+        <button class="remove-item" onclick="this.parentElement.remove()">X</button>
+    `;
+    container.appendChild(div);
+    matCount++;
 }
 
-// ─── Lesson Plan Generator ─────────────────────────────────────────────────
-function generateLessonPlan(subject, purchaseItem) {
-    const item = purchaseItem || 'instructional materials';
-    const s = subject || 'this subject';
-    return {
-        lesson1: {
-            title: `Introduction to ${s} Concepts`,
-            activities: [
-                `Introduction to key ${s.toLowerCase()} concepts and learning objectives.`,
-                `Guided instruction using ${item} to demonstrate core principles.`,
-                'Guided practice applying concepts through structured activities.',
-                'Review and assessment to check understanding.'
-            ]
-        },
-        lesson2: {
-            title: `Applying ${s} Skills`,
-            activities: [
-                'Review of previously learned concepts and introduction of new material.',
-                `Hands-on application using ${item} to reinforce understanding.`,
-                'Independent practice with guidance and feedback.',
-                'Reflection and connection to real-world applications.'
-            ]
-        }
-    };
+function addUnitRow() {
+    const container = document.getElementById('unitsContainer');
+    const i = unitCount + 1;
+    const div = document.createElement('div');
+    div.className = 'unit-entry';
+    div.dataset.unit = i;
+    div.innerHTML = `
+        <hr style="border-color:rgba(255,255,255,0.06); margin:1rem 0;">
+        <div class="form-group">
+            <label>Unit ${i} title</label>
+            <input type="text" class="unit-title" placeholder="e.g., Advanced Comprehension">
+        </div>
+        <div class="form-group">
+            <label>Weeks</label>
+            <input type="text" class="unit-weeks" placeholder="e.g., Weeks 4-8">
+        </div>
+        <div class="form-group">
+            <label>Objective &amp; Activities</label>
+            <textarea class="unit-activities" placeholder="Describe the objective and activities." style="min-height:60px;"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Goal / Task</label>
+            <input type="text" class="unit-goal" placeholder="e.g., Create a Library Map">
+        </div>
+        <button class="remove-item" onclick="this.parentElement.remove()">Remove unit</button>
+    `;
+    container.appendChild(div);
+    unitCount = i;
 }
 
-// ─── Receipt Scanner ───────────────────────────────────────────────────────
 function scanReceipt() {
     const text = document.getElementById('receiptText').value.trim();
     if (!text) { alert('Paste a receipt first.'); return; }
-
     const lines = text.split('\n').map(l => l.trim()).filter(l => l);
     let vendor = '';
     let total = '';
-    let items = [];
-    let inItems = false;
-
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
-
-        // First non-empty line is usually the vendor
-        if (i === 0 && !line.match(/^[0-9/$]/)) {
-            vendor = line;
-            continue;
-        }
-
-        // Detect total line
-        if (line.match(/^total/i) || line.match(/^total/i)) {
+        if (i === 0 && !line.match(/^[0-9/$]/)) vendor = line;
+        if (line.match(/^total/i)) {
             const m = line.match(/\$?([0-9,]+\.\d{2})/);
             if (m) total = m[1];
             break;
         }
-
-        // Skip header/date/address lines
-        if (line.match(/^date/i) || line.match(/^subtotal/i) || line.match(/^tax/i) || line.match(/\d+\/\d+\/\d+/)) continue;
-
-        // Detect item lines (have a price at the end)
-        const itemMatch = line.match(/^(.+?)\s+(\$?[0-9,]+\.\d{2})\s*$/);
-        if (itemMatch && !line.match(/^subtotal/i) && !line.match(/^tax/i) && !line.match(/^total/i)) {
-            items.push(itemMatch[1].trim());
-        }
     }
-
-    // Auto-fill form
-    if (vendor) document.getElementById('vendor').value = vendor;
-    if (total) document.getElementById('amount').value = total;
-    if (items.length) document.getElementById('purchaseItem').value = items.join(', ');
-
-    // Show scan result
+    document.getElementById('matName0').value = vendor || '';
+    document.getElementById('matPrice0').value = total || '';
     const details = document.getElementById('scanDetails');
     details.innerHTML = `
         <div class="item">Vendor: <span>${vendor || '(not detected)'}</span></div>
-        <div class="item">Items: <span>${items.slice(0, 3).join(', ')}${items.length > 3 ? ' (+' + (items.length-3) + ' more)' : ''}</span></div>
         <div class="item">Total: <span>$${total || '(not detected)'}</span></div>
     `;
     document.getElementById('scanResult').classList.add('visible');
+}
+// ─── AI Generation via Gemini ──────────────────────────────────────────────
+function generateWithAI() {
+    const sn = document.getElementById('studentName').value.trim();
+    const subj = document.getElementById('subject').value;
+    const grade = document.getElementById('grade').value;
+    const ct = document.getElementById('courseTitle').value.trim() || `${subj || 'Learning'} Plan`;
+    const dur = document.getElementById('duration').value || '6 Weeks';
+    
+    if (!subj) { alert('Select a subject first.'); return; }
+    
+    // Check for API key
+    let apiKey = localStorage.getItem('esa_gemini_key');
+    if (!apiKey) {
+        apiKey = prompt('Enter your Gemini API key (get one free at aistudio.google.com):');
+        if (!apiKey) { btn.disabled = false; btn.textContent = '✨ Generate with AI'; return; }
+        localStorage.setItem('esa_gemini_key', apiKey);
+    }
+    
+    const btn = event.target;
+    btn.textContent = '⏳ Generating...';
+    btn.disabled = true;
+    
+    // Collect materials
+    let items = [];
+    for (let i = 0; i < matCount; i++) {
+        const el = document.getElementById('matName' + i);
+        if (el && el.value.trim()) {
+            items.push(el.value.trim());
+        }
+    }
+    
+    const prompt = `You are helping an Arizona homeschool parent write a Parent-Provided Curriculum (PPC) for the ESA program. Generate ONLY the content — no explanations, no markdown formatting.
 
-    // Auto-scroll to the curriculum form
-    document.getElementById('subject').focus();
+Course: ${ct}
+Subject: ${subj}
+Grade: ${grade || 'Not specified'}
+Duration: ${dur}
+${sn ? 'Student: ' + sn : ''}
+${items.length ? 'Purchased items: ' + items.join(', ') : ''}
+
+Generate the following sections:
+
+SCOPE OF STUDY:
+A 2-3 sentence narrative paragraph describing what this course covers.
+
+LEARNING OBJECTIVES:
+3-5 bullet points of specific learning objectives. Each starts with a bold topic heading.
+
+LESSON PLAN:
+3 units (each 1-3 weeks). For each unit provide: title, weeks, activities description, and a goal/task.
+
+JUSTIFICATION:
+A paragraph explaining why this course and these materials are essential for homeschooling.
+
+Keep it practical and specific. Use ${items.length ? 'the purchased items listed above' : 'typical materials for this subject'} as the materials. Return each section separated by "---".`;
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }]
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        const sections = text.split('---').map(s => s.trim()).filter(s => s);
+        
+        // Parse sections
+        sections.forEach(section => {
+            if (section.match(/^SCOPE/i)) {
+                document.getElementById('scopeOfStudy').value = section.replace(/^SCOPE[^:]*:?\s*/i, '').trim();
+            } else if (section.match(/^LEARNING/i) || section.match(/^OBJECTIVES/i)) {
+                const lines = section.replace(/^LEARNING[^:]*:?\s*/i, '').trim().split('\n');
+                const formatted = lines.map(l => l.replace(/^[-*]\s*/, '').trim()).filter(l => l).join('\n');
+                document.getElementById('objectives').value = formatted;
+            } else if (section.match(/^LESSON/i)) {
+                // Parse units from the lesson plan section
+                const units = section.replace(/^LESSON[^:]*:?\s*/i, '').trim();
+                const unitRegex = /Unit\s*(\d+)\s*(?:\(([^)]+)\))?\s*:?\s*(.*?)(?=Unit\s*\d+|Goal|Task|$)/gims;
+                // Try simpler approach: clear defaults and let user see the raw output
+                document.getElementById('scopeOfStudy').value += '\n\nLesson Plan:\n' + units;
+            } else if (section.match(/^JUST/i)) {
+                document.getElementById('homeschoolJustification').value = section.replace(/^JUSTIFICATION[^:]*:?\s*/i, '').trim();
+            } else {
+                // Put unrecognized sections into scope
+                const cur = document.getElementById('scopeOfStudy').value;
+                if (!cur || cur.length < 20) document.getElementById('scopeOfStudy').value = section;
+            }
+        });
+        
+        btn.textContent = '✅ AI Generated!';
+        setTimeout(() => { btn.textContent = '✨ Generate with AI'; btn.disabled = false; }, 2000);
+    })
+    .catch(err => {
+        console.error(err);
+        btn.textContent = '❌ Failed — try again';
+        btn.disabled = false;
+    });
 }
 
-// ─── Curriculum Generator ──────────────────────────────────────────────────
+// ─── Curriculum Compiler ────────────────────────────────────────────────────
 function generateCurriculum() {
-    const studentName = document.getElementById('studentName').value.trim();
-    const studentId = document.getElementById('studentId').value.trim();
-    const subject = document.getElementById('subject').value;
+    const sn = document.getElementById('studentName').value.trim();
+    const si = document.getElementById('studentId').value.trim();
+    const ct = document.getElementById('courseTitle').value.trim();
+    const subj = document.getElementById('subject').value;
     const grade = document.getElementById('grade').value;
-    const purchaseItem = document.getElementById('purchaseItem').value.trim();
-    const vendor = document.getElementById('vendor').value.trim();
-    const amount = document.getElementById('amount').value.trim();
-    const justification = document.getElementById('justification').value.trim();
-    const customObjective = document.getElementById('learningObjective').value.trim();
+    const dur = document.getElementById('duration').value;
+    const scope = document.getElementById('scopeOfStudy').value.trim();
+    const objs = document.getElementById('objectives').value.trim();
+    const just = document.getElementById('homeschoolJustification').value.trim();
+    const links = document.getElementById('resourceLinks').value.trim();
 
-    if (!studentName || !studentId || !subject || !grade) {
-        alert('Please fill in student name, ID, subject, and grade level.');
+    if (!sn || !si || !subj) {
+        alert('Please fill in student name, ID, and subject.');
         return;
     }
 
-    const objective = customObjective || getObjective(subject, grade);
-    const plan = generateLessonPlan(subject, purchaseItem);
-    const item = purchaseItem || 'instructional materials';
+    // Collect materials
+    let materials = '';
+    for (let i = 0; i < matCount; i++) {
+        const el = document.getElementById('matName' + i);
+        if (el && el.value.trim()) {
+            const name = el.value.trim();
+            const price = document.getElementById('matPrice' + i)?.value?.trim() || '';
+            const why = document.getElementById('matWhy' + i)?.value?.trim() || '';
+            materials += `• ${name}${price ? ' ($' + price + ')' : ''}\n`;
+            if (why) materials += `  ${why}\n`;
+        }
+    }
 
-    const output = `PARENT-PROVIDED CURRICULUM
-Arizona Empowerment Scholarship Account (ESA)
-School Year 2025-2026
+    // Collect units
+    let units = '';
+    const unitEls = document.querySelectorAll('.unit-entry');
+    unitEls.forEach((el, idx) => {
+        const title = el.querySelector('.unit-title')?.value?.trim();
+        const weeks = el.querySelector('.unit-weeks')?.value?.trim();
+        const activities = el.querySelector('.unit-activities')?.value?.trim();
+        const goal = el.querySelector('.unit-goal')?.value?.trim();
+        if (title || activities) {
+            units += `\nUnit ${idx + 1}${weeks ? ' (' + weeks + ')' : ''}${title ? ': ' + title : ''}\n`;
+            if (activities) units += activities + '\n';
+            if (goal) units += `Goal/Task: ${goal}\n`;
+        }
+    });
 
-Student name: ${studentName}
-Student application ID#: ${studentId}
+    const courseTitle = ct || `${subj} — ${sn.split(' ')[0] || 'Student'}'s Learning Plan`;
+    const scopeText = scope || `This course provides instruction in ${subj.toLowerCase()} at the ${grade || 'appropriate'} grade level.`;
+    const objLines = objs ? objs.split('\n').filter(l => l.trim()).map(l => `• ${l.trim()}`).join('\n') : '';
+    const durLine = dur ? `Duration: ${dur}` : '';
+    const justText = just || `This curriculum provides essential ${subj.toLowerCase()} instruction for ${sn.split(' ')[0] || 'my student'}'s homeschool education. All materials listed are directly related to and required for the lessons described.`;
 
-Subject: ${subject}
-Grade level: ${grade}
-${vendor ? 'Vendor: ' + vendor : ''}
-${amount ? 'Amount: $' + amount : ''}
-${purchaseItem ? '\nPurchase: ' + purchaseItem : ''}
-${justification ? '\nEducational justification:\n' + justification : ''}
+    const output = `Course of Study: ${courseTitle}
+Student Name: ${sn}
+Student Application ID#: ${si}
+Subject Category: ${subj}${grade ? ' / Grade ' + grade : ''}
+${durLine}
 
-Learning objective:
-${objective}
+Scope of Study
+${scopeText}
 
-Method of teaching / lesson plans / activities:
+${objLines ? 'Key Learning Objectives:\n' + objLines + '\n' : ''}
+${materials ? 'Materials List & Educational Justification\n' + materials : ''}
+${units ? 'Weekly Sequence of Lessons' + units : ''}
+Why This is Necessary for Homeschooling
+${justText}
 
-Lesson 1: ${plan.lesson1.title}
-${plan.lesson1.activities.map((a, i) => `  ${i+1}. ${a}`).join('\n')}
+${links ? 'Resources:\n' + links : ''}
 
-Lesson 2: ${plan.lesson2.title}
-${plan.lesson2.activities.map((a, i) => `  ${i+1}. ${a}`).join('\n')}
-
-${purchaseItem ? 'Materials:\n• ' + purchaseItem : ''}
-
-Additional notes:
-This curriculum is provided as a parent-planned course of study for the ${subject.toLowerCase()} content area at the ${grade} grade level. All materials listed are directly related to and required for the lessons described above.`;
+This Parent-Provided Curriculum was prepared in accordance with A.R.S. §15-2402.
+ESA Program — School Year 2025-2026`;
 
     document.getElementById('outputContent').textContent = output;
     document.getElementById('outputSection').classList.add('visible');
@@ -488,7 +582,7 @@ This curriculum is provided as a parent-planned course of study for the ${subjec
 function copyOutput() {
     const text = document.getElementById('outputContent').textContent;
     navigator.clipboard.writeText(text).then(() => {
-        const btn = document.querySelector('.output-section .btn-secondary');
+        const btn = document.querySelectorAll('.output-section .btn-secondary')[0];
         const original = btn.textContent;
         btn.textContent = '✅ Copied!';
         setTimeout(() => btn.textContent = original, 2000);
@@ -499,7 +593,7 @@ function printOutput() {
     const content = document.getElementById('outputContent').textContent;
     const win = window.open('', '', 'width=800,height=600');
     win.document.write('<html><head><title>Parent-Provided Curriculum</title>');
-    win.document.write('<style>body { font-family: Georgia, serif; padding: 40px; line-height: 1.6; white-space: pre-wrap; }</style>');
+    win.document.write('<style>body{font-family:Georgia,serif;padding:40px;line-height:1.6;white-space:pre-wrap;}</style>');
     win.document.write('</head><body><pre style="font-family:Georgia,serif;white-space:pre-wrap;">' + content + '</pre></body></html>');
     win.document.close();
     win.print();
