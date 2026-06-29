@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESA Parent-Provided Curriculum Builder — Inkwell Digital</title>
+    <title>ESA Curriculum Builder — Inkwell Digital</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -12,142 +12,91 @@
             color: #e4e4ec;
             line-height: 1.6;
         }
-        .container { max-width: 720px; margin: 0 auto; padding: 2rem; }
-        .header { text-align: center; margin-bottom: 2rem; }
+        .container { max-width: 680px; margin: 0 auto; padding: 2rem; }
+        .header { text-align: center; margin-bottom: 1.5rem; }
         .header img { height: 36px; }
-        h1 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 800; line-height: 1.1;
-            letter-spacing: -1px; margin-bottom: 1rem;
+        h1 { font-size: 1.5rem; font-weight: 700; text-align: center; margin-bottom: 0.3rem; }
+        .sub { text-align: center; font-size: 0.9rem; color: #8b8ba3; margin-bottom: 1.5rem; }
+
+        .step-indicator {
+            display: flex; justify-content: center; gap: 6px; margin-bottom: 1.5rem;
         }
-        h1 em {
-            font-style: normal;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .step-dot {
+            width: 32px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1);
+            transition: background 0.3s;
         }
-        .subtitle {
-            font-size: 1.05rem; color: #8b8ba3;
-            margin-bottom: 2rem; max-width: 560px;
-            line-height: 1.7;
-        }
-        .divider { height: 1px; background: rgba(255,255,255,0.06); margin: 2.5rem 0; }
-        h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.2rem; }
-        .form-section {
+        .step-dot.active { background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
+        .step-dot.done { background: #22c55e; }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+        .card {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 16px; padding: 24px; margin-bottom: 1.5rem;
+            border-radius: 16px; padding: 24px; margin-bottom: 1rem;
         }
-        .form-section h3 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #b4b4cc; }
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group label {
-            display: block; font-size: 0.88rem;
-            font-weight: 500; color: #9a9ab0; margin-bottom: 0.3rem;
+        .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #b4b4cc; }
+
+        label { display: block; font-size: 0.85rem; font-weight: 500; color: #9a9ab0; margin-bottom: 0.3rem; }
+        input, select, textarea {
+            width: 100%; font-family: inherit; font-size: 0.95rem; padding: 12px 14px;
+            background: #0d0d18; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+            color: #e4e4ec; outline: none; transition: border-color 0.15s;
         }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; font-family: inherit;
-            font-size: 0.95rem; padding: 12px 14px;
-            background: #0d0d18;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px; color: #e4e4ec;
-            outline: none; transition: border-color 0.15s;
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: rgba(59,130,246,0.4);
-        }
-        .form-group textarea { resize: vertical; min-height: 80px; }
-        .form-group select option { background: #0d0d18; color: #e4e4ec; }
-        .item-entry input, .item-entry textarea,
-        .unit-entry input, .unit-entry textarea {
-            background: #0d0d18;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: #e4e4ec;
-            padding: 12px 14px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            outline: none;
-        }
-        .item-entry input:focus, .item-entry textarea:focus,
-        .unit-entry input:focus, .unit-entry textarea:focus {
-            border-color: rgba(59,130,246,0.4);
-        }
-        .row { display: flex; gap: 1rem; flex-wrap: wrap; }
-        .row .form-group { flex: 1; min-width: 200px; }
+        input:focus, select:focus, textarea:focus { border-color: rgba(59,130,246,0.4); }
+        textarea { resize: vertical; min-height: 70px; }
+        select option { background: #0d0d18; color: #e4e4ec; }
+
+        .row { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .row > * { flex: 1; min-width: 0; }
+        .form-group { margin-bottom: 1rem; }
+
+        .btn-row { display: flex; gap: 8px; margin-top: 1.5rem; }
         .btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            gap: 8px; padding: 14px 28px; border-radius: 12px;
-            font-size: 1rem; font-weight: 700; border: none;
-            cursor: pointer; transition: transform 0.12s, box-shadow 0.12s;
+            padding: 14px 24px; border-radius: 12px; font-size: 0.95rem; font-weight: 600;
+            border: none; cursor: pointer; transition: transform 0.12s, box-shadow 0.12s;
+            flex: 1; text-align: center;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            color: #fff; width: 100%;
+        .btn-primary { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: #fff; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(59,130,246,0.25); }
+        .btn-ghost { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #b4b4cc; }
+        .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+        .btn-pro { background: linear-gradient(135deg, #a855f7, #8b5cf6); color: #fff; }
+        .btn-pro:hover { transform: translateY(-1px); }
+        .btn-success { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
+        .btn-success:hover { transform: translateY(-1px); }
+
+        .upload-area {
+            background: #0d0d18; border: 1px dashed rgba(255,255,255,0.15); border-radius: 12px;
+            padding: 24px; text-align: center; cursor: pointer; transition: border-color 0.15s;
         }
-        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(59,130,246,0.25); }
-        .btn-secondary {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #b4b4cc; width: 100%;
+        .upload-area:hover { border-color: rgba(59,130,246,0.3); }
+        .upload-area .icon { font-size: 2rem; margin-bottom: 8px; }
+        .upload-area .text { color: #6b6b83; }
+
+        .output-box {
+            background: #0d0d18; border: 1px solid rgba(34,197,94,0.15); border-radius: 12px;
+            padding: 20px; margin: 1rem 0; white-space: pre-wrap; font-family: Georgia, serif;
+            font-size: 0.9rem; line-height: 1.7; max-height: 500px; overflow-y: auto;
         }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
-        .output-section {
-            display: none;
-            background: rgba(34,197,94,0.04);
-            border: 1px solid rgba(34,197,94,0.15);
-            border-radius: 16px; padding: 24px;
-            margin-top: 1.5rem;
+
+        .file-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .file-row input { flex: 1; }
+        .file-row textarea { flex: 1.5; min-height: 44px; font-size: 0.85rem; padding: 10px; }
+        .remove-btn { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 0.85rem; }
+
+        .pro-section {
+            background: rgba(168,85,247,0.04); border: 1px solid rgba(168,85,247,0.15);
+            border-radius: 12px; padding: 16px; margin-bottom: 1rem;
         }
-        .output-section.visible { display: block; }
-        .output-content {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            font-size: 0.95rem; color: #d4d4e0;
-            line-height: 1.7; padding: 24px;
-            background: #0d0d18; border-radius: 10px;
-            margin-bottom: 1rem; white-space: pre-wrap;
-        }
-        .scan-result {
-            display: none;
-            background: rgba(59,130,246,0.06);
-            border: 1px solid rgba(59,130,246,0.15);
-            border-radius: 12px; padding: 16px;
-            margin-top: 1rem;
-        }
-        .scan-result.visible { display: block; }
-        .scan-result .item { font-size: 0.9rem; padding: 4px 0; color: #b4b4cc; }
-        .scan-result .item span { color: #e4e4ec; font-weight: 600; }
-        .items-list { margin-bottom: 1.2rem; }
-        .item-entry {
-            display: flex; gap: 8px; align-items: center;
-            margin-bottom: 8px;
-        }
-        .item-entry input { flex: 1; }
-        .item-entry textarea { flex: 1; min-height: 50px; font-size: 0.85rem; }
-        .remove-item {
-            background: rgba(239,68,68,0.15);
-            border: 1px solid rgba(239,68,68,0.2);
-            color: #f87171;
-            border-radius: 8px; padding: 8px 12px;
-            cursor: pointer; font-size: 0.85rem;
-        }
-        .add-item {
-            background: rgba(59,130,246,0.1);
-            border: 1px dashed rgba(59,130,246,0.25);
-            color: #60a5fa;
-            border-radius: 10px; padding: 10px;
-            cursor: pointer; font-size: 0.88rem;
-            text-align: center; width: 100%;
-        }
-        .faq { margin-bottom: 2rem; }
-        .faq-q { font-weight: 600; margin-top: 1.2rem; margin-bottom: 0.3rem; font-size: 0.93rem; }
-        .faq-a { font-size: 0.88rem; color: #8b8ba3; }
+
         .fine-print { font-size: 0.8rem; color: #4b4b63; text-align: center; margin-top: 2rem; }
+
         @media (max-width: 500px) {
-            .container { padding: 1.5rem; }
-            .form-section { padding: 16px; }
+            .container { padding: 1rem; }
+            .card { padding: 16px; }
             .row { flex-direction: column; }
-            .row .form-group { min-width: 100%; }
         }
     </style>
 </head>
@@ -157,64 +106,48 @@
 <div class="header">
     <img src="https://connorarutherford-create.github.io/inkwell-digital/logo-ink.svg" alt="Inkwell Digital">
 </div>
-    <h1>Build your <em>Parent-Provided Curriculum</em></h1>
-    <p class="subtitle">Fill in what you bought and what your student is studying. We'll generate a complete PPC that meets Arizona ESA standards — ready to submit.</p>
+<h1>ESA Curriculum Builder</h1>
+<p class="sub" id="stepTitle">Step 1 of 6 — Receipt</p>
 
-    <div style="background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.12); border-radius:12px; padding:16px; margin-bottom:2rem; font-size:0.88rem; color:#b4b4cc;">
-        <p style="font-weight:600; color:#60a5fa; margin-bottom:6px;">&#128161; How to use this tool</p>
-        <p><strong>1.</strong> Scan a receipt (optional) — paste text, it auto-fills the form.</p>
-        <p><strong>2.</strong> Fill in student &amp; course details.</p>
-        <p><strong>3.</strong> Click <strong style="color:#a855f7;">Generate with AI</strong> (Pro) or fill in scope, objectives, and units manually.</p>
-        <p><strong>4.</strong> Click <strong style="color:#22c55e;">Compile PPC</strong> to generate the final document.</p>
-        <p style="margin-top:6px; color:#8b8ba3;">Tip: The more detail you add about your purchase, the better the AI-generated curriculum.</p>
-    </div>
+<div class="step-indicator" id="stepDots"></div>
 
-    <div class="divider"></div>
-
-    <h2>Scan a Receipt</h2>
-    <p style="font-size:0.9rem; color:#8b8ba3; margin-bottom:1rem;">Upload a receipt photo, or paste the text.</p>
-    <div class="form-section">
-        <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
-            <div style="flex:1; position:relative;">
-                <input type="file" id="receiptUpload" accept="image/*" capture="environment" onchange="updateFileName(this)" style="display:none;">
-                <div onclick="document.getElementById('receiptUpload').click()" style="background:#0d0d18; border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px 14px; color:#6b6b83; font-size:0.88rem; cursor:pointer; display:flex; align-items:center; gap:8px;">
-                    <span style="font-size:1.1rem;">&#128247;</span>
-                    <span id="fileName">Choose receipt photo...</span>
-                </div>
-            </div>
-            <button class="btn btn-primary" onclick="scanReceiptPhoto()" style="width:auto; padding:12px 20px; font-size:0.85rem;">Scan Photo</button>
+<!-- Step 1: Receipt -->
+<div class="step active" data-step="1">
+    <div class="card">
+        <h3>&#128247; Scan or Paste Receipt</h3>
+        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1rem;">Upload a receipt photo or paste the text. We'll extract vendor and items. (Optional — skip if you don't have a receipt.)</p>
+        <input type="file" id="receiptUpload" accept="image/*" capture="environment" onchange="handleFilePick(this)" style="display:none;">
+        <div class="upload-area" onclick="document.getElementById('receiptUpload').click()">
+            <div class="icon">&#128247;</div>
+            <div class="text" id="fileLabel">Tap to choose a receipt photo...</div>
         </div>
-        <p style="text-align:center; font-size:0.85rem; color:#6b6b83; position:relative;"><span style="background:#0a0a14; padding:0 12px;">or</span></p>
-        <div style="position:relative; margin-top:8px;">
-            <textarea id="receiptText" placeholder="Paste receipt text..." style="min-height:100px; font-family:'Courier New',monospace; font-size:0.88rem; width:100%; background:#0d0d18; border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px 14px; color:#e4e4ec; outline:none; resize:vertical;"></textarea>
-            <button onclick="parseReceiptText()" style="position:absolute; bottom:10px; right:10px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.2); color:#60a5fa; border-radius:8px; padding:6px 14px; font-size:0.82rem; cursor:pointer;">Parse</button>
+        <p style="text-align:center; font-size:0.85rem; color:#6b6b83; margin:0.8rem 0;">or</p>
+        <textarea id="receiptText" placeholder="Paste receipt text here..." style="min-height:80px;"></textarea>
+        <div class="btn-row" style="margin-top:8px;">
+            <button class="btn btn-ghost" onclick="skipStep()">Skip</button>
+            <button class="btn btn-primary" onclick="scanReceiptAndAdvance()">Scan &amp; Continue</button>
         </div>
-        <div class="scan-result" id="scanResult" style="margin-top:12px;">
-            <p style="font-size:0.9rem; font-weight:600; margin-bottom:8px;">&#9989; Receipt scanned</p>
-            <div id="scanDetails"></div>
+        <div id="receiptResult" style="display:none; margin-top:12px; padding:12px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.12); border-radius:10px;">
+            <p style="color:#22c55e; font-weight:600; margin-bottom:6px;">&#9989; Receipt scanned</p>
+            <div id="receiptDetails" style="font-size:0.88rem; color:#8b8ba3;"></div>
         </div>
     </div>
+</div>
 
-    <div class="divider"></div>
-
-    <h2>Curriculum Details</h2>
-
-    <div class="form-section">
-        <h3>Student</h3>
+<!-- Step 2: Student & Course -->
+<div class="step" data-step="2">
+    <div class="card">
+        <h3>&#128218; Student &amp; Course</h3>
         <div class="row">
             <div class="form-group">
-                <label>Full name</label>
+                <label>Student name</label>
                 <input type="text" id="studentName" placeholder="First and last name">
             </div>
             <div class="form-group">
-                <label>Student application ID#</label>
-                <input type="text" id="studentId" placeholder="From your ESA account">
+                <label>ESA application ID#</label>
+                <input type="text" id="studentId" placeholder="From your account">
             </div>
         </div>
-    </div>
-
-    <div class="form-section">
-        <h3>Course Info</h3>
         <div class="form-group">
             <label>Course title</label>
             <input type="text" id="courseTitle" placeholder="e.g., Sustainable Chemistry &amp; Environmental Stewardship">
@@ -224,521 +157,396 @@
                 <label>Subject</label>
                 <select id="subject">
                     <option value="">Select...</option>
-                    <option value="Reading">Reading</option>
-                    <option value="Grammar">Grammar</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Science">Science</option>
-                    <option value="Environmental Science">Environmental Science</option>
-                    <option value="Social Studies">Social Studies</option>
-                    <option value="Art">Art</option>
-                    <option value="Music">Music</option>
-                    <option value="Physical Education">PE</option>
-                    <option value="Foreign Language">Foreign Language</option>
-                    <option value="Library Science">Library Science</option>
-                    <option value="Life Skills">Life Skills</option>
-                    <option value="Other">Other</option>
+                    <option>Reading</option><option>Grammar</option><option>Mathematics</option>
+                    <option>Science</option><option>Environmental Science</option><option>Social Studies</option>
+                    <option>Art</option><option>Music</option><option>Physical Education</option>
+                    <option>Foreign Language</option><option>Library Science</option><option>Life Skills</option>
+                    <option>Other</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Grade</label>
                 <select id="grade">
                     <option value="">Select...</option>
-                    <option value="PK">PK</option>
-                    <option value="K">K</option>
-                    <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                    <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-                    <option value="7">7</option><option value="8">8</option>
+                    <option>PK</option><option>K</option>
+                    <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+                    <option>6</option><option>7</option><option>8</option><option>9</option>
+                    <option>10</option><option>11</option><option>12</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Duration</label>
                 <select id="duration">
                     <option value="">Select...</option>
-                    <option value="4 Weeks">4 weeks</option>
-                    <option value="6 Weeks">6 weeks</option>
-                    <option value="8 Weeks">8 weeks</option>
-                    <option value="12 Weeks">12 weeks</option>
-                    <option value="Semester">Semester</option>
-                    <option value="Full Year">Full Year</option>
+                    <option>4 Weeks</option><option>6 Weeks</option><option>8 Weeks</option>
+                    <option>12 Weeks</option><option>Semester</option><option>Full Year</option>
                 </select>
             </div>
         </div>
+        <div class="btn-row">
+            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+            <button class="btn btn-primary" onclick="nextStep()">Continue</button>
+        </div>
     </div>
+</div>
 
-    <div class="form-section">
-        <h3>Scope of Study</h3>
+<!-- Step 3: Scope & Objectives -->
+<div class="step" data-step="3">
+    <div class="card">
+        <h3>&#128214; Scope &amp; Objectives</h3>
+        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1rem;">Describe what this course covers. Pro users can generate this with AI.</p>
+        <div class="pro-section">
+            <p style="font-size:0.85rem; color:#a855f7; font-weight:600; margin-bottom:4px;">&#9733; Pro Feature</p>
+            <p style="font-size:0.82rem; color:#8b8ba3; margin-bottom:8px;">Generate scope, objectives, and lesson plans with one click.</p>
+            <button class="btn btn-pro" onclick="generateWithAI()" id="aiBtn" style="width:auto; padding:10px 20px; font-size:0.85rem;">&#9889; Generate with AI</button>
+        </div>
         <div class="form-group">
-            <label>Description of the course (what will your student learn?)</label>
-            <textarea id="scopeOfStudy" placeholder="e.g., This unit explores the science of sustainable food preservation. The student will investigate the physical and chemical properties of natural materials..." style="min-height:100px;"></textarea>
+            <label>Scope of study</label>
+            <textarea id="scopeOfStudy" placeholder="Describe what this course covers..." style="min-height:80px;"></textarea>
         </div>
         <div class="form-group">
             <label>Learning objectives (one per line)</label>
-            <textarea id="objectives" placeholder="Human Impact on Earth Systems: Analyzing how reducing single-use plastics mitigates ocean pollution.
-Properties of Matter: Studying the antimicrobial properties of beeswax and how heat alters the state of waxes.
-Life Science: Exploring the role of honeybees in the ecosystem." style="min-height:100px;"></textarea>
+            <textarea id="objectives" placeholder="Objective 1
+Objective 2
+Objective 3" style="min-height:80px;"></textarea>
+        </div>
+        <div class="btn-row">
+            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+            <button class="btn btn-primary" onclick="nextStep()">Continue</button>
         </div>
     </div>
+</div>
 
-    <div class="form-section">
-        <h3>Materials &amp; Justification</h3>
-        <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:1rem;">List each item and explain why it's needed for this course.</p>
-        <div id="materialsContainer">
-            <div class="item-entry">
-                <input type="text" id="matName0" placeholder="Item name" style="flex:1;">
-                <input type="text" id="matPrice0" placeholder="Price" style="width:80px;">
-                <textarea id="matWhy0" placeholder="Why is this educationally necessary?" style="flex:2; min-height:50px; font-size:0.85rem;"></textarea>
+<!-- Step 4: Materials -->
+<div class="step" data-step="4">
+    <div class="card">
+        <h3>&#128230; Materials &amp; Justification</h3>
+        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1rem;">List each item and explain why it's needed for this course.</p>
+        <div id="materialsList">
+            <div class="file-row">
+                <input type="text" id="mat0" placeholder="Item name">
+                <input type="text" id="matPrice0" placeholder="Price" style="width:90px;">
+                <textarea id="matWhy0" placeholder="Why is this educationally necessary?" style="min-height:44px;"></textarea>
             </div>
         </div>
-        <div class="add-item" onclick="addMaterialRow()">+ Add another item</div>
+        <button class="btn btn-ghost" onclick="addMaterial()" style="width:100%; padding:10px; margin-top:8px;">+ Add item</button>
+        <div class="btn-row" style="margin-top:1rem;">
+            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+            <button class="btn btn-primary" onclick="nextStep()">Continue</button>
+        </div>
     </div>
+</div>
 
-    <div class="form-section">
-        <h3>Weekly / Unit Lesson Plan</h3>
-        <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:1rem;">Describe what you'll do each week or unit.</p>
-        <div id="unitsContainer">
-            <div class="unit-entry" data-unit="1">
+<!-- Step 5: Lesson Plan -->
+<div class="step" data-step="5">
+    <div class="card">
+        <h3>&#128195; Lesson Plan</h3>
+        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1rem;">Describe what you'll cover each unit.</p>
+        <div id="unitsList">
+            <div class="unit-row">
                 <div class="form-group">
                     <label>Unit 1 title</label>
-                    <input type="text" class="unit-title" placeholder="e.g., The Plastic Crisis &amp; Alternatives">
+                    <input type="text" class="unit-title" placeholder="e.g., The Plastic Crisis">
+                </div>
+                <div class="row">
+                    <div class="form-group" style="flex:0.4;">
+                        <label>Weeks</label>
+                        <input type="text" class="unit-weeks" placeholder="e.g., 1-3">
+                    </div>
+                    <div class="form-group">
+                        <label>Goal / task</label>
+                        <input type="text" class="unit-goal" placeholder="e.g., Create shelf labels">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Weeks</label>
-                    <input type="text" class="unit-weeks" placeholder="e.g., Weeks 1-3">
-                </div>
-                <div class="form-group">
-                    <label>Objective &amp; Activities</label>
-                    <textarea class="unit-activities" placeholder="Describe the objective and activities for this unit." style="min-height:60px;"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Goal / Task</label>
-                    <input type="text" class="unit-goal" placeholder="e.g., Create shelf labels for the bookcase">
+                    <label>Activities</label>
+                    <textarea class="unit-activities" placeholder="Describe the activities for this unit." style="min-height:60px;"></textarea>
                 </div>
             </div>
         </div>
-        <div class="add-item" onclick="addUnitRow()">+ Add another unit</div>
+        <button class="btn btn-ghost" onclick="addUnit()" style="width:100%; padding:10px; margin-top:8px;">+ Add unit</button>
+        <div class="btn-row" style="margin-top:1rem;">
+            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+            <button class="btn btn-primary" onclick="nextStep()">Continue</button>
+        </div>
     </div>
+</div>
 
-    <div class="form-section">
-        <h3>Justification</h3>
+<!-- Step 6: Justification & Output -->
+<div class="step" data-step="6">
+    <div class="card">
+        <h3>&#128221; Justification &amp; Output</h3>
         <div class="form-group">
             <label>Why is this course necessary for your homeschool?</label>
-            <textarea id="homeschoolJustification" placeholder="e.g., Executive Function: Managing a physical library requires planning, categorization, and maintenance — all core skills for independent learners..." style="min-height:80px;"></textarea>
+            <textarea id="homeschoolJust" placeholder="Executive Function: Managing a physical library requires planning, categorization, and maintenance..." style="min-height:70px;"></textarea>
         </div>
         <div class="form-group">
             <label>Resources / links (optional)</label>
-            <input type="text" id="resourceLinks" placeholder="e.g., https://www.youtube.com/watch?v=...">
+            <input type="text" id="resourceLinks" placeholder="https://...">
         </div>
-    </div>
-
-    <button class="btn btn-primary" onclick="generateWithAI()" id="aiGenerateBtn" style="background:linear-gradient(135deg, #a855f7, #8b5cf6); margin-bottom:12px;">&#9889; Generate with AI <span style="font-size:0.7rem; opacity:0.7; display:block;">Pro feature</span></button>
-    <p style="font-size:0.82rem; color:#6b6b83; margin-top:0.5rem; margin-bottom:1.5rem;">AI generates the scope, objectives, lesson plans, and justification. <a href="#" onclick="showProUpgrade(); return false;" style="color:#a855f7;">Upgrade to Pro</a> to unlock.</p>
-    <hr style="border-color:rgba(255,255,255,0.06); margin:1rem 0;">
-    <button class="btn btn-primary" onclick="generateCurriculum()" style="background:linear-gradient(135deg, #22c55e, #16a34a); margin-top:12px;">Compile PPC <span style="font-size:0.7rem; opacity:0.7; display:block;">Free</span></button>
-
-    <div class="output-section" id="outputSection">
-        <h2 style="margin-bottom: 0.5rem;">Your Parent-Provided Curriculum</h2>
-        <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:1rem;">Copy this into a Google Doc or print it for your records.</p>
-        <div class="output-content" id="outputContent"></div>
-        <button class="btn btn-secondary" onclick="copyOutput()">&#128203; Copy to Clipboard</button>
-        <button class="btn btn-secondary" style="margin-top:8px;" onclick="printOutput()">&#128424; Print</button>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="form-section" id="proSection" style="border-color: rgba(168,85,247,0.2);">
-        <h3 style="color: #a855f7;">&#9733; ESA Curriculum Pro</h3>
-        <p style="font-size:0.9rem; color:#8b8ba3; margin-bottom:0.5rem;">Unlock AI generation — fills in scope, objectives, lesson plans, and justification in seconds.</p>
-        <div id="proStatus">
-            <p style="font-size:0.88rem; color:#6b6b83; margin-bottom:1rem;">$4.99/year &middot; one click generates a full PPC</p>
-            <a href="https://gumroad.com/l/esa-curriculum-pro" target="_blank" class="btn btn-primary" style="display:inline-block; width:auto; padding:12px 24px; font-size:0.9rem; text-decoration:none; background:linear-gradient(135deg, #a855f7, #8b5cf6);">&#9733; Buy Pro — $4.99/year</a>
-            <p style="font-size:0.8rem; color:#6b6b83; margin-top:0.8rem;">After purchase, paste your license key below to activate.</p>
-            <div style="display:flex; gap:8px; margin-top:8px;">
-                <input type="text" id="licenseKey" placeholder="Paste your Gumroad license key" style="flex:1; font-family:monospace; font-size:0.85rem;">
-                <button class="btn btn-primary" onclick="activateLicense()" style="width:auto; padding:12px 20px; font-size:0.85rem; background:linear-gradient(135deg, #a855f7, #8b5cf6);">Activate</button>
+        <div class="btn-row">
+            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+            <button class="btn btn-success" onclick="compilePPC()">&#9889; Compile PPC</button>
+        </div>
+        <div id="outputBox" style="display:none;">
+            <div class="output-box" id="ppcOutput"></div>
+            <div class="btn-row">
+                <button class="btn btn-ghost" onclick="copyPPC()">&#128203; Copy</button>
+                <button class="btn btn-ghost" onclick="printPPC()">&#128424; Print</button>
+                <button class="btn btn-ghost" onclick="startOver()">&#8635; New</button>
             </div>
         </div>
-        <div id="proActive" style="display:none;">
-            <p style="font-size:0.95rem; color:#22c55e; font-weight:600;">&#9989; Pro Active — AI generation unlocked</p>
+    </div>
+</div>
+
+<!-- Pro upsell -->
+<div class="divider" style="height:1px; background:rgba(255,255,255,0.06); margin:1.5rem 0;"></div>
+<div class="pro-section" id="proSection">
+    <p style="font-weight:600; color:#a855f7; margin-bottom:4px;">&#9733; ESA Curriculum Pro</p>
+    <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:10px;">Unlock AI generation — scope, objectives, lesson plans, and receipt scanning in seconds.</p>
+    <div id="proStatus">
+        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:10px;">$4.99/year &middot; 7-day free trial</p>
+        <a href="https://gumroad.com/l/esa-curriculum-pro" target="_blank" class="btn btn-pro" style="display:inline-block; text-decoration:none; padding:10px 20px; font-size:0.85rem;">&#9733; Buy Pro — $4.99/year</a>
+        <p style="font-size:0.8rem; color:#6b6b83; margin-top:10px;">After purchase, paste your license key:</p>
+        <div style="display:flex; gap:8px; margin-top:6px;">
+            <input type="text" id="licenseKey" placeholder="License key" style="font-family:monospace; font-size:0.85rem;">
+            <button class="btn btn-pro" onclick="activateLicense()" style="width:auto; padding:10px 20px; font-size:0.85rem;">Activate</button>
         </div>
     </div>
-
-    <div class="divider"></div>
-    <div class="faq">
-        <h2 style="margin-bottom: 0.5rem;">About PPCs</h2>
-        <div class="faq-q">What is a Parent-Provided Curriculum?</div>
-        <div class="faq-a">A document Arizona ESA parents submit showing why their purchases meet educational criteria. Required for purchases beyond auto-approved items.</div>
-        <div class="faq-q">What happens if it's rejected?</div>
-        <div class="faq-a">There is no formal "rejection" process — the PPC is submitted with your receipt documentation. A clear, detailed PPC protects you in the case of an audit.</div>
-        <div class="faq-q">Is there an official template?</div>
-        <div class="faq-a">The AZ DOE provides a simple fillable form with 6 fields, but the community has developed more thorough formats like this one. The more detail you provide, the stronger your documentation.</div>
+    <div id="proActive" style="display:none;">
+        <p style="color:#22c55e; font-weight:600;">&#9989; Pro Active</p>
     </div>
+</div>
 
-    <div class="divider"></div>
-    <div class="fine-print">Inkwell Digital — connorarutherford@gmail.com</div>
+<div class="divider" style="height:1px; background:rgba(255,255,255,0.06); margin:1.5rem 0;"></div>
+<div class="fine-print">Inkwell Digital — connorarutherford@gmail.com</div>
 </div>
 
 <script>
 let matCount = 1;
 let unitCount = 1;
 let proEnabled = false;
+let items = [];
 
-function updateFileName(input) {
-    document.getElementById('fileName').textContent = input.files[0]?.name || 'Choose receipt photo...';
-}
-
-// Check Pro license on load
+// --- Step navigation ---
+const totalSteps = 6;
 (function() {
-    const license = localStorage.getItem('esa_pro_license');
-    if (license) {
-        proEnabled = true;
-        document.getElementById('proStatus').style.display = 'none';
-        document.getElementById('proActive').style.display = 'block';
+    const dots = document.getElementById('stepDots');
+    for (let i = 1; i <= totalSteps; i++) {
+        const d = document.createElement('div');
+        d.className = 'step-dot' + (i === 1 ? ' active' : '');
+        d.id = 'dot' + i;
+        dots.appendChild(d);
     }
 })();
 
-function showProUpgrade() {
-    document.getElementById('proSection').scrollIntoView({ behavior: 'smooth' });
-    document.getElementById('licenseKey').focus();
+function goToStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.querySelector('.step[data-step="' + n + '"]').classList.add('active');
+    document.querySelectorAll('.step-dot').forEach((d, i) => {
+        d.className = 'step-dot';
+        if (i + 1 < n) d.classList.add('done');
+        else if (i + 1 === n) d.classList.add('active');
+    });
+    const titles = ['Receipt', 'Student & Course', 'Scope & Objectives', 'Materials', 'Lesson Plan', 'Justification & Output'];
+    document.getElementById('stepTitle').textContent = 'Step ' + n + ' of 6 — ' + titles[n - 1];
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+function nextStep() {
+    const cur = parseInt(document.querySelector('.step.active').dataset.step);
+    if (cur < totalSteps) goToStep(cur + 1);
+}
+function prevStep() { const cur = parseInt(document.querySelector('.step.active').dataset.step); if (cur > 1) goToStep(cur - 1); }
+function skipStep() { goToStep(2); }
+
+// --- Pro license ---
+(function() {
+    const lic = localStorage.getItem('esa_pro_license');
+    if (lic) { proEnabled = true;
+        document.getElementById('proStatus').style.display = 'none';
+        document.getElementById('proActive').style.display = 'block'; }
+})();
 
 function activateLicense() {
     const key = document.getElementById('licenseKey').value.trim();
-    if (!key) { alert('Paste your Gumroad license key.'); return; }
-    
-    // Call Gumroad License API
+    if (!key) return;
     fetch('https://api.gumroad.com/v2/licenses/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'product_id=' + encodeURIComponent('ukk37CB6CSPdQPMMdsA-sA==') + '&license_key=' + encodeURIComponent(key)
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (data.success && data.purchase && !data.purchase.refunded && !data.purchase.disputed) {
+    }).then(r => r.json()).then(data => {
+        if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;
             localStorage.setItem('esa_pro_license', 'true');
             document.getElementById('proStatus').style.display = 'none';
             document.getElementById('proActive').style.display = 'block';
-            document.getElementById('licenseKey').value = '';
-        } else {
-            alert('License key is not valid. Check your Gumroad purchase.');
         }
-    })
-    .catch(() => {
-        alert('Could not verify license. Check your connection and try again.');
-    });
+    }).catch(() => alert('Could not verify license.'));
 }
 
-function addMaterialRow() {
-    const container = document.getElementById('materialsContainer');
-    const div = document.createElement('div');
-    div.className = 'item-entry';
-    div.innerHTML = `
-        <input type="text" id="matName${matCount}" placeholder="Item name" style="flex:1;">
-        <input type="text" id="matPrice${matCount}" placeholder="Price" style="width:80px;">
-        <textarea id="matWhy${matCount}" placeholder="Why is this educationally necessary?" style="flex:2; min-height:50px; font-size:0.85rem;"></textarea>
-        <button class="remove-item" onclick="this.parentElement.remove()">X</button>
-    `;
-    container.appendChild(div);
-    matCount++;
+// --- Receipt ---
+function handleFilePick(input) {
+    document.getElementById('fileLabel').textContent = input.files[0]?.name || 'Tap to choose a receipt photo...';
 }
 
-function addUnitRow() {
-    const container = document.getElementById('unitsContainer');
-    const i = unitCount + 1;
-    const div = document.createElement('div');
-    div.className = 'unit-entry';
-    div.dataset.unit = i;
-    div.innerHTML = `
-        <hr style="border-color:rgba(255,255,255,0.06); margin:1rem 0;">
-        <div class="form-group">
-            <label>Unit ${i} title</label>
-            <input type="text" class="unit-title" placeholder="e.g., Advanced Comprehension">
-        </div>
-        <div class="form-group">
-            <label>Weeks</label>
-            <input type="text" class="unit-weeks" placeholder="e.g., Weeks 4-8">
-        </div>
-        <div class="form-group">
-            <label>Objective &amp; Activities</label>
-            <textarea class="unit-activities" placeholder="Describe the objective and activities." style="min-height:60px;"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Goal / Task</label>
-            <input type="text" class="unit-goal" placeholder="e.g., Create a Library Map">
-        </div>
-        <button class="remove-item" onclick="this.parentElement.remove()">Remove unit</button>
-    `;
-    container.appendChild(div);
-    unitCount = i;
-}
+function scanReceiptAndAdvance() {
+    const file = document.getElementById('receiptUpload').files[0];
+    const text = document.getElementById('receiptText').value.trim();
 
-function scanReceiptPhoto() {
-    const fileInput = document.getElementById('receiptUpload');
-    const file = fileInput.files[0];
-    if (!file) { alert('Select a receipt photo first.'); return; }
-    
-    if (!proEnabled) {
-        alert('AI photo scanning requires ESA Curriculum Pro. Upgrade below to unlock.');
-        showProUpgrade();
-        return;
+    if (file && proEnabled) {
+        let apiKey = localStorage.getItem('esa_gemini_key');
+        if (!apiKey) {
+            apiKey = prompt('Enter your Gemini API key:');
+            if (!apiKey) return;
+            localStorage.setItem('esa_gemini_key', apiKey);
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const b64 = e.target.result.split(',')[1];
+            fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + apiKey, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [
+                    { text: 'Extract vendor, total, and items from this receipt. Return ONLY JSON: {"vendor":"","total":"","items":[]}' },
+                    { inline_data: { mime_type: file.type, data: b64 } }
+                ]}]})
+            }).then(r => r.json()).then(d => {
+                const raw = d?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                try { const j = JSON.parse(raw.replace(/^```.*\n?|```\s*$/g, '')); fillFromReceipt(j); } catch(e) {}
+                goToStep(2);
+            }).catch(() => goToStep(2));
+        };
+        reader.readAsDataURL(file);
+    } else if (text) {
+        // Simple regex parse for text
+        const lines = text.split('\n').filter(l => l.trim());
+        const v = lines[0]?.replace(/^\d+\/\d+\/\d+/, '').trim() || '';
+        const totMatch = text.match(/[Tt]otal\s*\$?([0-9,]+\.\d{2})/);
+        const tot = totMatch ? totMatch[1] : '';
+        fillFromReceipt({ vendor: v, total: tot, items: [] });
+        showReceiptResult(v, tot);
+        goToStep(2);
+    } else {
+        goToStep(2);
     }
-    
+}
+
+function fillFromReceipt(j) {
+    if (j.vendor) document.getElementById('mat0').value = j.vendor;
+    if (j.total) document.getElementById('matPrice0').value = j.total;
+    if (j.items && j.items.length) {
+        for (let i = 0; i < j.items.length; i++) {
+            if (i > 0) addMaterial();
+            const el = document.getElementById('mat' + i);
+            if (el) el.value = j.items[i];
+        }
+    }
+}
+
+function showReceiptResult(v, t) {
+    const r = document.getElementById('receiptResult');
+    r.style.display = 'block';
+    document.getElementById('receiptDetails').innerHTML = (v ? 'Vendor: ' + v : '') + (t ? '<br>Total: $' + t : '');
+}
+
+// --- Materials ---
+function addMaterial() {
+    const list = document.getElementById('materialsList');
+    const div = document.createElement('div'); div.className = 'file-row';
+    div.innerHTML = `
+        <input type="text" id="mat${matCount}" placeholder="Item name">
+        <input type="text" id="matPrice${matCount}" placeholder="Price" style="width:90px;">
+        <textarea id="matWhy${matCount}" placeholder="Why needed?" style="min-height:44px;"></textarea>
+        <button class="remove-btn" onclick="this.parentElement.remove()">X</button>
+    `;
+    list.appendChild(div); matCount++;
+}
+
+// --- Units ---
+function addUnit() {
+    const list = document.getElementById('unitsList');
+    const i = unitCount + 1;
+    const div = document.createElement('div'); div.className = 'unit-row';
+    div.innerHTML = `
+        <div style="margin:1rem 0 0; border-top:1px solid rgba(255,255,255,0.06); padding-top:1rem;">
+            <div class="form-group"><label>Unit ${i} title</label><input type="text" class="unit-title" placeholder="e.g., Advanced Topics"></div>
+            <div class="row">
+                <div class="form-group" style="flex:0.4;"><label>Weeks</label><input type="text" class="unit-weeks" placeholder="e.g., 4-8"></div>
+                <div class="form-group"><label>Goal</label><input type="text" class="unit-goal" placeholder="e.g., Final project"></div>
+            </div>
+            <div class="form-group"><label>Activities</label><textarea class="unit-activities" style="min-height:60px;"></textarea></div>
+            <button class="remove-btn" onclick="this.parentElement.parentElement.remove()">Remove unit</button>
+        </div>
+    `;
+    list.appendChild(div); unitCount = i;
+}
+
+// --- AI Generation ---
+function generateWithAI() {
+    if (!proEnabled) { document.getElementById('proSection').scrollIntoView({ behavior: 'smooth' }); return; }
+    const subj = document.getElementById('subject').value;
+    if (!subj) { alert('Select a subject first.'); return; }
     let apiKey = localStorage.getItem('esa_gemini_key');
     if (!apiKey) {
-        apiKey = prompt('Enter your Gemini API key to enable AI scanning:');
+        apiKey = prompt('Enter your Gemini API key:');
         if (!apiKey) return;
         localStorage.setItem('esa_gemini_key', apiKey);
     }
-    
-    const btn = event.target;
-    btn.textContent = '⏳ Scanning...';
+    const sn = document.getElementById('studentName').value.trim();
+    const ct = document.getElementById('courseTitle').value.trim() || subj + ' Plan';
+    const dur = document.getElementById('duration').value || '6 Weeks';
+    const grade = document.getElementById('grade').value || '';
+
+    // Collect materials for prompt
+    let mats = [];
+    for (let i = 0; i < matCount; i++) {
+        const el = document.getElementById('mat' + i);
+        if (el && el.value.trim()) mats.push(el.value.trim());
+    }
+
+    const btn = document.getElementById('aiBtn');
+    btn.textContent = '⏳ Generating...';
     btn.disabled = true;
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const base64 = e.target.result.split(',')[1];
-        const prompt = {
-            contents: [{
-                parts: [
-                    { text: 'Extract the vendor name, total amount, and list of items from this receipt photo. Return ONLY valid JSON with keys: "vendor", "total" (string with number only), "items" (array of item name strings). No markdown.' },
-                    { inline_data: { mime_type: file.type, data: base64 } }
-                ]
-            }]
-        };
-        
-        fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(prompt)
-        })
-        .then(r => r.json())
-        .then(data => {
-            btn.textContent = '✅ Scanned';
-            setTimeout(() => { btn.textContent = 'Scan Photo'; btn.disabled = false; }, 2000);
-            const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            try {
-                const json = JSON.parse(raw.replace(/^```json\s*|```\s*$/g, '').trim());
-                document.getElementById('matName0').value = json.vendor || file.name;
-                document.getElementById('matPrice0').value = json.total || '';
-                if (json.items && json.items.length) {
-                    for (let i = 0; i < json.items.length; i++) {
-                        if (i > 0) addMaterialRow();
-                        document.getElementById('matName' + (i)).value = json.items[i];
-                    }
-                }
-                showScanResult(json.vendor || file.name, json.total || '', json.items);
-            } catch(e) {
-                document.getElementById('matName0').value = file.name;
-                showScanResult(file.name, '', []);
-            }
-        })
-        .catch(err => {
-            btn.textContent = '❌ Failed';
-            btn.disabled = false;
-            alert('AI scan failed. Try pasting the text manually.');
-        });
-    };
-    reader.readAsDataURL(file);
-}
 
-function parseReceiptText() {
-    scanReceipt();
-}
+    const prompt = `Generate a Parent-Provided Curriculum for Arizona ESA. Subject: ${subj}${grade ? ', Grade ' + grade : ''}. Duration: ${dur}. Course: ${ct}. ${sn ? 'Student: ' + sn + '.' : ''}${mats.length ? ' Materials: ' + mats.join(', ') + '.' : ''}
 
-function scanReceipt() {
-    const text = document.getElementById('receiptText').value.trim();
-    if (!text) { alert('Paste a receipt first.'); return; }
-    
-    // Check Pro for AI scan
-    if (proEnabled) {
-        // Try AI scan if API key is available
-        let apiKey = localStorage.getItem('esa_gemini_key');
-        if (apiKey) {
-            scanWithAI(text, apiKey);
-            return;
-        }
-    }
-    
-    // Fall back to regex scan
-    scanWithRegex(text);
-}
+Return exactly three sections separated by "---":
 
-function scanWithRegex(text) {
-    const lines = text.split('\n').map(l => l.trim()).filter(l => l);
-    let vendor = '';
-    let total = '';
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        if (i === 0 && !line.match(/^[0-9/$]/)) vendor = line;
-        if (line.match(/^total/i)) {
-            const m = line.match(/\$?([0-9,]+\.\d{2})/);
-            if (m) total = m[1];
-            break;
-        }
-    }
-    document.getElementById('matName0').value = vendor || '';
-    document.getElementById('matPrice0').value = total || '';
-    showScanResult(vendor || '(not detected)', total || '(not detected)');
-}
+SCOPE:
+2-3 sentence narrative paragraph describing this course.
 
-function scanWithAI(text, apiKey) {
-    const prompt = `Extract vendor name, total amount, and list of items from this receipt. Return ONLY a JSON object with keys: "vendor" (string), "total" (string with number only), "items" (array of item name strings). No markdown, no explanation.
+OBJECTIVES:
+3-5 bullet points starting with a bold topic heading.
 
-Receipt:
-${text}`;
-    
-    fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+LESSONS:
+3 units. For each: title, weeks, activities, goal.
+
+JUSTIFICATION:
+Paragraph explaining why this course is essential for homeschooling.`;
+
+    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + apiKey, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-    })
-    .then(r => r.json())
-    .then(data => {
-        const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-        const json = JSON.parse(raw.replace(/^```json\s*|```\s*$/g, '').trim());
-        const vendor = json.vendor || '';
-        const total = json.total || '';
-        const items = json.items || [];
-        
-        document.getElementById('matName0').value = vendor || '';
-        document.getElementById('matPrice0').value = total || '';
-        // Add extra items as additional material rows
-        if (items.length > 0) {
-            // First item name goes to first row
-            if (!document.getElementById('matName0').value) {
-                document.getElementById('matName0').value = items[0];
-            }
-            // Add remaining items
-            for (let i = 1; i < items.length; i++) {
-                addMaterialRow();
-                document.getElementById('matName' + (matCount - 1)).value = items[i];
-            }
-        }
-        showScanResult(vendor || '(AI detected)', total || '(not detected)', items);
-    })
-    .catch(() => scanWithRegex(text)); // fallback
-}
-
-function showScanResult(vendor, total, items) {
-    const details = document.getElementById('scanDetails');
-    details.innerHTML = `
-        <div class="item">Vendor: <span>${vendor}</span></div>
-        <div class="item">Total: <span>$${total}</span></div>
-        ${items && items.length ? '<div class="item">Items: <span>' + items.join(', ') + '</span></div>' : ''}
-    `;
-    document.getElementById('scanResult').classList.add('visible');
-}
-// ─── AI Generation via Gemini ──────────────────────────────────────────────
-function generateWithAI() {
-    const sn = document.getElementById('studentName').value.trim();
-    const subj = document.getElementById('subject').value;
-    const grade = document.getElementById('grade').value;
-    const ct = document.getElementById('courseTitle').value.trim() || `${subj || 'Learning'} Plan`;
-    const dur = document.getElementById('duration').value || '6 Weeks';
-    
-    if (!subj) { alert('Select a subject first.'); return; }
-    
-    // Check Pro license
-    if (!proEnabled) {
-        showProUpgrade();
-        return;
-    }
-    
-    // Check for API key
-    let apiKey = localStorage.getItem('esa_gemini_key');
-    if (!apiKey) {
-        apiKey = prompt('Enter your Gemini API key (get one free at aistudio.google.com):');
-        if (!apiKey) { btn.disabled = false; btn.textContent = '✨ Generate with AI'; return; }
-        localStorage.setItem('esa_gemini_key', apiKey);
-    }
-    
-    const btn = event.target;
-    btn.textContent = '⏳ Generating...';
-    btn.disabled = true;
-    
-    // Collect materials
-    let items = [];
-    for (let i = 0; i < matCount; i++) {
-        const el = document.getElementById('matName' + i);
-        if (el && el.value.trim()) {
-            items.push(el.value.trim());
-        }
-    }
-    
-    const prompt = `You are helping an Arizona homeschool parent write a Parent-Provided Curriculum (PPC) for the ESA program. Generate ONLY the content — no explanations, no markdown formatting.
-
-Course: ${ct}
-Subject: ${subj}
-Grade: ${grade || 'Not specified'}
-Duration: ${dur}
-${sn ? 'Student: ' + sn : ''}
-${items.length ? 'Purchased items: ' + items.join(', ') : ''}
-
-Generate the following sections:
-
-SCOPE OF STUDY:
-A 2-3 sentence narrative paragraph describing what this course covers.
-
-LEARNING OBJECTIVES:
-3-5 bullet points of specific learning objectives. Each starts with a bold topic heading.
-
-LESSON PLAN:
-3 units (each 1-3 weeks). For each unit provide: title, weeks, activities description, and a goal/task.
-
-JUSTIFICATION:
-A paragraph explaining why this course and these materials are essential for homeschooling.
-
-Keep it practical and specific. Use ${items.length ? 'the purchased items listed above' : 'typical materials for this subject'} as the materials. Return each section separated by "---".`;
-
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    
-    fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }]
-        })
-    })
-    .then(r => r.json())
-    .then(data => {
+    }).then(r => r.json()).then(data => {
         const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
         const sections = text.split('---').map(s => s.trim()).filter(s => s);
-        
-        // Parse sections
-        sections.forEach(section => {
-            if (section.match(/^SCOPE/i)) {
-                document.getElementById('scopeOfStudy').value = section.replace(/^SCOPE[^:]*:?\s*/i, '').trim();
-            } else if (section.match(/^LEARNING/i) || section.match(/^OBJECTIVES/i)) {
-                const lines = section.replace(/^LEARNING[^:]*:?\s*/i, '').trim().split('\n');
-                const formatted = lines.map(l => l.replace(/^[-*]\s*/, '').trim()).filter(l => l).join('\n');
-                document.getElementById('objectives').value = formatted;
-            } else if (section.match(/^LESSON/i)) {
-                // Parse units from the lesson plan section
-                const units = section.replace(/^LESSON[^:]*:?\s*/i, '').trim();
-                const unitRegex = /Unit\s*(\d+)\s*(?:\(([^)]+)\))?\s*:?\s*(.*?)(?=Unit\s*\d+|Goal|Task|$)/gims;
-                // Try simpler approach: clear defaults and let user see the raw output
-                document.getElementById('scopeOfStudy').value += '\n\nLesson Plan:\n' + units;
-            } else if (section.match(/^JUST/i)) {
-                document.getElementById('homeschoolJustification').value = section.replace(/^JUSTIFICATION[^:]*:?\s*/i, '').trim();
-            } else {
-                // Put unrecognized sections into scope
-                const cur = document.getElementById('scopeOfStudy').value;
-                if (!cur || cur.length < 20) document.getElementById('scopeOfStudy').value = section;
-            }
+        sections.forEach(s => {
+            if (s.match(/^SCOPE/i)) document.getElementById('scopeOfStudy').value = s.replace(/^SCOPE:?\s*/i, '').trim();
+            else if (s.match(/^OBJECTIVES/i)) {
+                document.getElementById('objectives').value = s.replace(/^OBJECTIVES:?\s*/i, '').replace(/^[-*]\s*/gm, '').trim();
+            } else if (s.match(/^JUSTIFICATION/i)) document.getElementById('homeschoolJust').value = s.replace(/^JUSTIFICATION:?\s*/i, '').trim();
         });
-        
-        btn.textContent = '✅ AI Generated!';
+        btn.textContent = '✅ Generated';
         setTimeout(() => { btn.textContent = '✨ Generate with AI'; btn.disabled = false; }, 2000);
-    })
-    .catch(err => {
-        console.error(err);
-        btn.textContent = '❌ Failed — try again';
-        btn.disabled = false;
-    });
+        nextStep(); // Go to step 4 (materials) since scope/objectives done
+        nextStep(); // Go to step 5 (lesson plan)
+    }).catch(() => { btn.textContent = '❌ Failed'; btn.disabled = false; });
 }
 
-// ─── Curriculum Compiler ────────────────────────────────────────────────────
-function generateCurriculum() {
+// --- Compile ---
+function compilePPC() {
     const sn = document.getElementById('studentName').value.trim();
     const si = document.getElementById('studentId').value.trim();
     const ct = document.getElementById('courseTitle').value.trim();
@@ -747,91 +555,76 @@ function generateCurriculum() {
     const dur = document.getElementById('duration').value;
     const scope = document.getElementById('scopeOfStudy').value.trim();
     const objs = document.getElementById('objectives').value.trim();
-    const just = document.getElementById('homeschoolJustification').value.trim();
+    const just = document.getElementById('homeschoolJust').value.trim();
     const links = document.getElementById('resourceLinks').value.trim();
 
-    if (!sn || !si || !subj) {
-        alert('Please fill in student name, ID, and subject.');
-        return;
-    }
+    if (!sn || !si || !subj) { alert('Fill in student name, ID, and subject.'); return; }
 
-    // Collect materials
-    let materials = '';
+    let mats = '';
     for (let i = 0; i < matCount; i++) {
-        const el = document.getElementById('matName' + i);
+        const el = document.getElementById('mat' + i);
         if (el && el.value.trim()) {
-            const name = el.value.trim();
-            const price = document.getElementById('matPrice' + i)?.value?.trim() || '';
-            const why = document.getElementById('matWhy' + i)?.value?.trim() || '';
-            materials += `• ${name}${price ? ' ($' + price + ')' : ''}\n`;
-            if (why) materials += `  ${why}\n`;
+            const p = document.getElementById('matPrice' + i)?.value?.trim() || '';
+            const w = document.getElementById('matWhy' + i)?.value?.trim() || '';
+            mats += '• ' + el.value.trim() + (p ? ' ($' + p + ')' : '') + '\n' + (w ? '  ' + w + '\n' : '');
         }
     }
 
-    // Collect units
     let units = '';
-    const unitEls = document.querySelectorAll('.unit-entry');
-    unitEls.forEach((el, idx) => {
-        const title = el.querySelector('.unit-title')?.value?.trim();
-        const weeks = el.querySelector('.unit-weeks')?.value?.trim();
-        const activities = el.querySelector('.unit-activities')?.value?.trim();
-        const goal = el.querySelector('.unit-goal')?.value?.trim();
-        if (title || activities) {
-            units += `\nUnit ${idx + 1}${weeks ? ' (' + weeks + ')' : ''}${title ? ': ' + title : ''}\n`;
-            if (activities) units += activities + '\n';
-            if (goal) units += `Goal/Task: ${goal}\n`;
+    document.querySelectorAll('.unit-row').forEach((el, idx) => {
+        const t = el.querySelector('.unit-title')?.value?.trim();
+        const w = el.querySelector('.unit-weeks')?.value?.trim();
+        const g = el.querySelector('.unit-goal')?.value?.trim();
+        const a = el.querySelector('.unit-activities')?.value?.trim();
+        if (t || a) {
+            units += '\nUnit ' + (idx + 1) + (w ? ' (Weeks ' + w + ')' : '') + (t ? ': ' + t : '') + '\n';
+            if (a) units += a + '\n';
+            if (g) units += 'Goal/Task: ' + g + '\n';
         }
     });
 
-    const courseTitle = ct || `${subj} — ${sn.split(' ')[0] || 'Student'}'s Learning Plan`;
-    const scopeText = scope || `This course provides instruction in ${subj.toLowerCase()} at the ${grade || 'appropriate'} grade level.`;
-    const objLines = objs ? objs.split('\n').filter(l => l.trim()).map(l => `• ${l.trim()}`).join('\n') : '';
-    const durLine = dur ? `Duration: ${dur}` : '';
-    const justText = just || `This curriculum provides essential ${subj.toLowerCase()} instruction for ${sn.split(' ')[0] || 'my student'}'s homeschool education. All materials listed are directly related to and required for the lessons described.`;
+    const objLines = objs ? objs.split('\n').filter(l => l.trim()).map(l => '• ' + l.trim()).join('\n') : '';
+    const title = ct || (subj + ' — ' + sn.split(' ')[0] + '\'s Learning Plan');
 
-    const output = `Course of Study: ${courseTitle}
+    const output = `Course of Study: ${title}
 Student Name: ${sn}
 Student Application ID#: ${si}
 Subject Category: ${subj}${grade ? ' / Grade ' + grade : ''}
-${durLine}
+${dur ? 'Duration: ' + dur : ''}
 
 Scope of Study
-${scopeText}
+${scope || 'This course provides instruction in ' + subj.toLowerCase() + '.'}
 
 ${objLines ? 'Key Learning Objectives:\n' + objLines + '\n' : ''}
-${materials ? 'Materials List & Educational Justification\n' + materials : ''}
+${mats ? 'Materials List & Educational Justification\n' + mats : ''}
 ${units ? 'Weekly Sequence of Lessons' + units : ''}
 Why This is Necessary for Homeschooling
-${justText}
+${just || 'This curriculum provides essential ' + subj.toLowerCase() + ' instruction for ' + sn.split(' ')[0] + '\'s homeschool education.'}
 
 ${links ? 'Resources:\n' + links : ''}
 
 This Parent-Provided Curriculum was prepared in accordance with A.R.S. §15-2402.
 ESA Program — School Year 2025-2026`;
 
-    document.getElementById('outputContent').textContent = output;
-    document.getElementById('outputSection').classList.add('visible');
-    document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('ppcOutput').textContent = output;
+    document.getElementById('outputBox').style.display = 'block';
+    document.getElementById('outputBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function copyOutput() {
-    const text = document.getElementById('outputContent').textContent;
-    navigator.clipboard.writeText(text).then(() => {
-        const btn = document.querySelectorAll('.output-section .btn-secondary')[0];
-        const original = btn.textContent;
-        btn.textContent = '✅ Copied!';
-        setTimeout(() => btn.textContent = original, 2000);
-    });
+function copyPPC() {
+    navigator.clipboard.writeText(document.getElementById('ppcOutput').textContent)
+        .then(() => alert('Copied!'));
 }
 
-function printOutput() {
-    const content = document.getElementById('outputContent').textContent;
-    const win = window.open('', '', 'width=800,height=600');
-    win.document.write('<html><head><title>Parent-Provided Curriculum</title>');
-    win.document.write('<style>body{font-family:Georgia,serif;padding:40px;line-height:1.6;white-space:pre-wrap;}</style>');
-    win.document.write('</head><body><pre style="font-family:Georgia,serif;white-space:pre-wrap;">' + content + '</pre></body></html>');
-    win.document.close();
-    win.print();
+function printPPC() {
+    const w = window.open('', '', 'width=800,height=600');
+    w.document.write('<html><head><title>PPC</title><style>body{font-family:Georgia,serif;padding:40px;line-height:1.6;white-space:pre-wrap;}</style></head><body><pre style="font-family:Georgia,serif;white-space:pre-wrap;">' + document.getElementById('ppcOutput').textContent + '</pre></body></html>');
+    w.document.close(); w.print();
+}
+
+function startOver() {
+    if (!confirm('Clear everything and start over?')) return;
+    location.reload();
 }
 </script>
 </body>
