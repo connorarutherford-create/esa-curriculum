@@ -172,20 +172,21 @@
     <div class="divider"></div>
 
     <h2>Scan a Receipt</h2>
-    <p style="font-size:0.9rem; color:#8b8ba3; margin-bottom:1rem;">Paste receipt text and we'll extract vendor and total to auto-fill the form below.</p>
+    <p style="font-size:0.9rem; color:#8b8ba3; margin-bottom:1rem;">Upload a receipt photo, or paste the text.</p>
     <div class="form-section">
-        <textarea id="receiptText" placeholder="Paste receipt text here...
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
+            <input type="file" id="receiptUpload" accept="image/*" capture="environment" style="flex:1; background:#0d0d18; border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:10px; color:#e4e4ec; font-size:0.88rem;">
+            <button class="btn btn-primary" onclick="scanReceiptPhoto()" style="width:auto; padding:12px 20px; font-size:0.85rem;">Scan Photo</button>
+        </div>
+        <p style="text-align:center; font-size:0.85rem; color:#6b6b83;">— or —</p>
+        <textarea id="receiptText" placeholder="Paste receipt text...
 
 Example:
 Walmart
 123 Main St
-03/15/2025
-
 Desk           149.99
-Pencils 12pk     3.49
-
-Total         $153.48" style="min-height:120px; font-family: 'Courier New', monospace; font-size: 0.88rem;"></textarea>
-        <button class="btn btn-primary" onclick="scanReceipt()" style="margin-top:12px;">Scan Receipt</button>
+Total         $153.48" style="min-height:100px; font-family: 'Courier New', monospace; font-size: 0.88rem; margin-top:8px;"></textarea>
+        <button class="btn btn-primary" onclick="parseReceiptText()" style="width:auto; padding:12px 20px; font-size:0.85rem; margin-top:8px;">Parse Text</button>
         <div class="scan-result" id="scanResult">
             <p style="font-size:0.9rem; font-weight:600; margin-bottom:8px;">&#9989; Receipt scanned</p>
             <div id="scanDetails"></div>
@@ -463,6 +464,79 @@ function addUnitRow() {
     `;
     container.appendChild(div);
     unitCount = i;
+}
+
+function scanReceiptPhoto() {
+    const fileInput = document.getElementById('receiptUpload');
+    const file = fileInput.files[0];
+    if (!file) { alert('Select a receipt photo first.'); return; }
+    
+    if (!proEnabled) {
+        alert('AI photo scanning requires ESA Curriculum Pro. Upgrade below to unlock.');
+        showProUpgrade();
+        return;
+    }
+    
+    let apiKey = localStorage.getItem('esa_gemini_key');
+    if (!apiKey) {
+        apiKey = prompt('Enter your Gemini API key to enable AI scanning:');
+        if (!apiKey) return;
+        localStorage.setItem('esa_gemini_key', apiKey);
+    }
+    
+    const btn = event.target;
+    btn.textContent = '⏳ Scanning...';
+    btn.disabled = true;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const base64 = e.target.result.split(',')[1];
+        const prompt = {
+            contents: [{
+                parts: [
+                    { text: 'Extract the vendor name, total amount, and list of items from this receipt photo. Return ONLY valid JSON with keys: "vendor", "total" (string with number only), "items" (array of item name strings). No markdown.' },
+                    { inline_data: { mime_type: file.type, data: base64 } }
+                ]
+            }]
+        };
+        
+        fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(prompt)
+        })
+        .then(r => r.json())
+        .then(data => {
+            btn.textContent = '✅ Scanned';
+            setTimeout(() => { btn.textContent = 'Scan Photo'; btn.disabled = false; }, 2000);
+            const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            try {
+                const json = JSON.parse(raw.replace(/^```json\s*|```\s*$/g, '').trim());
+                document.getElementById('matName0').value = json.vendor || file.name;
+                document.getElementById('matPrice0').value = json.total || '';
+                if (json.items && json.items.length) {
+                    for (let i = 0; i < json.items.length; i++) {
+                        if (i > 0) addMaterialRow();
+                        document.getElementById('matName' + (i)).value = json.items[i];
+                    }
+                }
+                showScanResult(json.vendor || file.name, json.total || '', json.items);
+            } catch(e) {
+                document.getElementById('matName0').value = file.name;
+                showScanResult(file.name, '', []);
+            }
+        })
+        .catch(err => {
+            btn.textContent = '❌ Failed';
+            btn.disabled = false;
+            alert('AI scan failed. Try pasting the text manually.');
+        });
+    };
+    reader.readAsDataURL(file);
+}
+
+function parseReceiptText() {
+    scanReceipt();
 }
 
 function scanReceipt() {
