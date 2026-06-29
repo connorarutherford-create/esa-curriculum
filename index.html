@@ -13,6 +13,8 @@
             line-height: 1.6;
         }
         .container { max-width: 720px; margin: 0 auto; padding: 2rem; }
+        .header { text-align: center; margin-bottom: 2rem; }
+        .header img { height: 36px; }
         h1 {
             font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 800; line-height: 1.1;
@@ -56,6 +58,21 @@
         }
         .form-group textarea { resize: vertical; min-height: 80px; }
         .form-group select option { background: #0d0d18; color: #e4e4ec; }
+        .item-entry input, .item-entry textarea,
+        .unit-entry input, .unit-entry textarea {
+            background: #0d0d18;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #e4e4ec;
+            padding: 12px 14px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        .item-entry input:focus, .item-entry textarea:focus,
+        .unit-entry input:focus, .unit-entry textarea:focus {
+            border-color: rgba(59,130,246,0.4);
+        }
         .row { display: flex; gap: 1rem; flex-wrap: wrap; }
         .row .form-group { flex: 1; min-width: 200px; }
         .btn {
@@ -137,9 +154,20 @@
 <body>
 <div class="container">
 
-    <img src="https://connorarutherford-create.github.io/inkwell-digital/logo-ink.svg" alt="Inkwell Digital" style="height: 32px; margin-bottom: 2rem;">
+<div class="header">
+    <img src="https://connorarutherford-create.github.io/inkwell-digital/logo-ink.svg" alt="Inkwell Digital">
+</div>
     <h1>Build your <em>Parent-Provided Curriculum</em></h1>
     <p class="subtitle">Fill in what you bought and what your student is studying. We'll generate a complete PPC that meets Arizona ESA standards — ready to submit.</p>
+
+    <div style="background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.12); border-radius:12px; padding:16px; margin-bottom:2rem; font-size:0.88rem; color:#b4b4cc;">
+        <p style="font-weight:600; color:#60a5fa; margin-bottom:6px;">&#128161; How to use this tool</p>
+        <p><strong>1.</strong> Scan a receipt (optional) — paste text, it auto-fills the form.</p>
+        <p><strong>2.</strong> Fill in student &amp; course details.</p>
+        <p><strong>3.</strong> Click <strong style="color:#a855f7;">Generate with AI</strong> (Pro) or fill in scope, objectives, and units manually.</p>
+        <p><strong>4.</strong> Click <strong style="color:#22c55e;">Compile PPC</strong> to generate the final document.</p>
+        <p style="margin-top:6px; color:#8b8ba3;">Tip: The more detail you add about your purchase, the better the AI-generated curriculum.</p>
+    </div>
 
     <div class="divider"></div>
 
@@ -440,6 +468,22 @@ function addUnitRow() {
 function scanReceipt() {
     const text = document.getElementById('receiptText').value.trim();
     if (!text) { alert('Paste a receipt first.'); return; }
+    
+    // Check Pro for AI scan
+    if (proEnabled) {
+        // Try AI scan if API key is available
+        let apiKey = localStorage.getItem('esa_gemini_key');
+        if (apiKey) {
+            scanWithAI(text, apiKey);
+            return;
+        }
+    }
+    
+    // Fall back to regex scan
+    scanWithRegex(text);
+}
+
+function scanWithRegex(text) {
     const lines = text.split('\n').map(l => l.trim()).filter(l => l);
     let vendor = '';
     let total = '';
@@ -454,10 +498,53 @@ function scanReceipt() {
     }
     document.getElementById('matName0').value = vendor || '';
     document.getElementById('matPrice0').value = total || '';
+    showScanResult(vendor || '(not detected)', total || '(not detected)');
+}
+
+function scanWithAI(text, apiKey) {
+    const prompt = `Extract vendor name, total amount, and list of items from this receipt. Return ONLY a JSON object with keys: "vendor" (string), "total" (string with number only), "items" (array of item name strings). No markdown, no explanation.
+
+Receipt:
+${text}`;
+    
+    fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    })
+    .then(r => r.json())
+    .then(data => {
+        const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        const json = JSON.parse(raw.replace(/^```json\s*|```\s*$/g, '').trim());
+        const vendor = json.vendor || '';
+        const total = json.total || '';
+        const items = json.items || [];
+        
+        document.getElementById('matName0').value = vendor || '';
+        document.getElementById('matPrice0').value = total || '';
+        // Add extra items as additional material rows
+        if (items.length > 0) {
+            // First item name goes to first row
+            if (!document.getElementById('matName0').value) {
+                document.getElementById('matName0').value = items[0];
+            }
+            // Add remaining items
+            for (let i = 1; i < items.length; i++) {
+                addMaterialRow();
+                document.getElementById('matName' + (matCount - 1)).value = items[i];
+            }
+        }
+        showScanResult(vendor || '(AI detected)', total || '(not detected)', items);
+    })
+    .catch(() => scanWithRegex(text)); // fallback
+}
+
+function showScanResult(vendor, total, items) {
     const details = document.getElementById('scanDetails');
     details.innerHTML = `
-        <div class="item">Vendor: <span>${vendor || '(not detected)'}</span></div>
-        <div class="item">Total: <span>$${total || '(not detected)'}</span></div>
+        <div class="item">Vendor: <span>${vendor}</span></div>
+        <div class="item">Total: <span>$${total}</span></div>
+        ${items && items.length ? '<div class="item">Items: <span>' + items.join(', ') + '</span></div>' : ''}
     `;
     document.getElementById('scanResult').classList.add('visible');
 }
