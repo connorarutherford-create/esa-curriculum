@@ -299,10 +299,10 @@ Life Science: Exploring the role of honeybees in the ecosystem." style="min-heig
         </div>
     </div>
 
-    <button class="btn btn-primary" onclick="generateWithAI()" style="background:linear-gradient(135deg, #a855f7, #8b5cf6); margin-bottom:12px;">&#9889; Generate with AI</button>
-    <p style="font-size:0.82rem; color:#6b6b83; margin-top:0.5rem; margin-bottom:1.5rem;">AI generates the scope, objectives, lesson plans, and justification. Fill in what you can and let AI handle the rest.</p>
+    <button class="btn btn-primary" onclick="generateWithAI()" id="aiGenerateBtn" style="background:linear-gradient(135deg, #a855f7, #8b5cf6); margin-bottom:12px;">&#9889; Generate with AI <span style="font-size:0.7rem; opacity:0.7; display:block;">Pro feature</span></button>
+    <p style="font-size:0.82rem; color:#6b6b83; margin-top:0.5rem; margin-bottom:1.5rem;">AI generates the scope, objectives, lesson plans, and justification. <a href="#" onclick="showProUpgrade(); return false;" style="color:#a855f7;">Upgrade to Pro</a> to unlock.</p>
     <hr style="border-color:rgba(255,255,255,0.06); margin:1rem 0;">
-    <button class="btn btn-primary" onclick="generateCurriculum()" style="background:linear-gradient(135deg, #22c55e, #16a34a); margin-top:12px;">Compile PPC</button>
+    <button class="btn btn-primary" onclick="generateCurriculum()" style="background:linear-gradient(135deg, #22c55e, #16a34a); margin-top:12px;">Compile PPC <span style="font-size:0.7rem; opacity:0.7; display:block;">Free</span></button>
 
     <div class="output-section" id="outputSection">
         <h2 style="margin-bottom: 0.5rem;">Your Parent-Provided Curriculum</h2>
@@ -310,6 +310,25 @@ Life Science: Exploring the role of honeybees in the ecosystem." style="min-heig
         <div class="output-content" id="outputContent"></div>
         <button class="btn btn-secondary" onclick="copyOutput()">&#128203; Copy to Clipboard</button>
         <button class="btn btn-secondary" style="margin-top:8px;" onclick="printOutput()">&#128424; Print</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="form-section" id="proSection" style="border-color: rgba(168,85,247,0.2);">
+        <h3 style="color: #a855f7;">&#9733; ESA Curriculum Pro</h3>
+        <p style="font-size:0.9rem; color:#8b8ba3; margin-bottom:0.5rem;">Unlock AI generation — fills in scope, objectives, lesson plans, and justification in seconds.</p>
+        <div id="proStatus">
+            <p style="font-size:0.88rem; color:#6b6b83; margin-bottom:1rem;">$4.99/year &middot; one click generates a full PPC</p>
+            <a href="https://gumroad.com/l/esa-curriculum-pro" target="_blank" class="btn btn-primary" style="display:inline-block; width:auto; padding:12px 24px; font-size:0.9rem; text-decoration:none; background:linear-gradient(135deg, #a855f7, #8b5cf6);">&#9733; Buy Pro — $4.99/year</a>
+            <p style="font-size:0.8rem; color:#6b6b83; margin-top:0.8rem;">After purchase, paste your license key below to activate.</p>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+                <input type="text" id="licenseKey" placeholder="Paste your Gumroad license key" style="flex:1; font-family:monospace; font-size:0.85rem;">
+                <button class="btn btn-primary" onclick="activateLicense()" style="width:auto; padding:12px 20px; font-size:0.85rem; background:linear-gradient(135deg, #a855f7, #8b5cf6);">Activate</button>
+            </div>
+        </div>
+        <div id="proActive" style="display:none;">
+            <p style="font-size:0.95rem; color:#22c55e; font-weight:600;">&#9989; Pro Active — AI generation unlocked</p>
+        </div>
     </div>
 
     <div class="divider"></div>
@@ -330,6 +349,49 @@ Life Science: Exploring the role of honeybees in the ecosystem." style="min-heig
 <script>
 let matCount = 1;
 let unitCount = 1;
+let proEnabled = false;
+
+// Check Pro license on load
+(function() {
+    const license = localStorage.getItem('esa_pro_license');
+    if (license) {
+        proEnabled = true;
+        document.getElementById('proStatus').style.display = 'none';
+        document.getElementById('proActive').style.display = 'block';
+    }
+})();
+
+function showProUpgrade() {
+    document.getElementById('proSection').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('licenseKey').focus();
+}
+
+function activateLicense() {
+    const key = document.getElementById('licenseKey').value.trim();
+    if (!key) { alert('Paste your Gumroad license key.'); return; }
+    
+    // Call Gumroad License API
+    fetch('https://api.gumroad.com/v2/licenses/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'product_id=' + encodeURIComponent('ukk37CB6CSPdQPMMdsA-sA==') + '&license_key=' + encodeURIComponent(key)
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success && data.purchase && !data.purchase.refunded && !data.purchase.disputed) {
+            proEnabled = true;
+            localStorage.setItem('esa_pro_license', 'true');
+            document.getElementById('proStatus').style.display = 'none';
+            document.getElementById('proActive').style.display = 'block';
+            document.getElementById('licenseKey').value = '';
+        } else {
+            alert('License key is not valid. Check your Gumroad purchase.');
+        }
+    })
+    .catch(() => {
+        alert('Could not verify license. Check your connection and try again.');
+    });
+}
 
 function addMaterialRow() {
     const container = document.getElementById('materialsContainer');
@@ -408,6 +470,12 @@ function generateWithAI() {
     const dur = document.getElementById('duration').value || '6 Weeks';
     
     if (!subj) { alert('Select a subject first.'); return; }
+    
+    // Check Pro license
+    if (!proEnabled) {
+        showProUpgrade();
+        return;
+    }
     
     // Check for API key
     let apiKey = localStorage.getItem('esa_gemini_key');
