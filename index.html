@@ -175,19 +175,21 @@
     <p style="font-size:0.9rem; color:#8b8ba3; margin-bottom:1rem;">Upload a receipt photo, or paste the text.</p>
     <div class="form-section">
         <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
-            <input type="file" id="receiptUpload" accept="image/*" capture="environment" style="flex:1; background:#0d0d18; border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:10px; color:#e4e4ec; font-size:0.88rem;">
+            <div style="flex:1; position:relative;">
+                <input type="file" id="receiptUpload" accept="image/*" capture="environment" onchange="updateFileName(this)" style="display:none;">
+                <div onclick="document.getElementById('receiptUpload').click()" style="background:#0d0d18; border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px 14px; color:#6b6b83; font-size:0.88rem; cursor:pointer; display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:1.1rem;">&#128247;</span>
+                    <span id="fileName">Choose receipt photo...</span>
+                </div>
+            </div>
             <button class="btn btn-primary" onclick="scanReceiptPhoto()" style="width:auto; padding:12px 20px; font-size:0.85rem;">Scan Photo</button>
         </div>
-        <p style="text-align:center; font-size:0.85rem; color:#6b6b83;">— or —</p>
-        <textarea id="receiptText" placeholder="Paste receipt text...
-
-Example:
-Walmart
-123 Main St
-Desk           149.99
-Total         $153.48" style="min-height:100px; font-family: 'Courier New', monospace; font-size: 0.88rem; margin-top:8px;"></textarea>
-        <button class="btn btn-primary" onclick="parseReceiptText()" style="width:auto; padding:12px 20px; font-size:0.85rem; margin-top:8px;">Parse Text</button>
-        <div class="scan-result" id="scanResult">
+        <p style="text-align:center; font-size:0.85rem; color:#6b6b83; position:relative;"><span style="background:#0a0a14; padding:0 12px;">or</span></p>
+        <div style="position:relative; margin-top:8px;">
+            <textarea id="receiptText" placeholder="Paste receipt text..." style="min-height:100px; font-family:'Courier New',monospace; font-size:0.88rem; width:100%; background:#0d0d18; border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px 14px; color:#e4e4ec; outline:none; resize:vertical;"></textarea>
+            <button onclick="parseReceiptText()" style="position:absolute; bottom:10px; right:10px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.2); color:#60a5fa; border-radius:8px; padding:6px 14px; font-size:0.82rem; cursor:pointer;">Parse</button>
+        </div>
+        <div class="scan-result" id="scanResult" style="margin-top:12px;">
             <p style="font-size:0.9rem; font-weight:600; margin-bottom:8px;">&#9989; Receipt scanned</p>
             <div id="scanDetails"></div>
         </div>
@@ -379,6 +381,10 @@ Life Science: Exploring the role of honeybees in the ecosystem." style="min-heig
 let matCount = 1;
 let unitCount = 1;
 let proEnabled = false;
+
+function updateFileName(input) {
+    document.getElementById('fileName').textContent = input.files[0]?.name || 'Choose receipt photo...';
+}
 
 // Check Pro license on load
 (function() {
