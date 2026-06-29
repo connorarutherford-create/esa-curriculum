@@ -12,28 +12,20 @@
             color: #e4e4ec;
             line-height: 1.6;
         }
-
         .container { max-width: 720px; margin: 0 auto; padding: 2rem; }
-
         .badge {
             display: inline-block;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 12px; font-weight: 700;
             background: rgba(59,130,246,0.12);
             border: 1px solid rgba(59,130,246,0.2);
             color: #60a5fa;
-            padding: 6px 14px;
-            border-radius: 20px;
-            letter-spacing: 0.4px;
-            margin-bottom: 2rem;
+            padding: 6px 14px; border-radius: 20px;
+            letter-spacing: 0.4px; margin-bottom: 2rem;
         }
-
         h1 {
             font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -1px;
-            margin-bottom: 1rem;
+            font-weight: 800; line-height: 1.1;
+            letter-spacing: -1px; margin-bottom: 1rem;
         }
         h1 em {
             font-style: normal;
@@ -42,27 +34,20 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .subtitle {
-            font-size: 1.05rem;
-            color: #8b8ba3;
-            margin-bottom: 2rem;
-            max-width: 560px;
+            font-size: 1.05rem; color: #8b8ba3;
+            margin-bottom: 2rem; max-width: 560px;
             line-height: 1.7;
         }
-
         .divider {
             height: 1px;
             background: rgba(255,255,255,0.06);
             margin: 2.5rem 0;
         }
-
         h2 {
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-size: 1.2rem; font-weight: 700;
             margin-bottom: 1.2rem;
         }
-
         .form-section {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.07);
@@ -71,60 +56,39 @@
             margin-bottom: 1.5rem;
         }
         .form-section h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #b4b4cc;
+            font-size: 1rem; font-weight: 600;
+            margin-bottom: 1rem; color: #b4b4cc;
         }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
+        .form-group { margin-bottom: 1.2rem; }
         .form-group label {
-            display: block;
-            font-size: 0.88rem;
-            font-weight: 500;
-            color: #9a9ab0;
+            display: block; font-size: 0.88rem;
+            font-weight: 500; color: #9a9ab0;
             margin-bottom: 0.3rem;
         }
         .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            font-family: inherit;
-            font-size: 0.95rem;
-            padding: 12px 14px;
+            width: 100%; font-family: inherit;
+            font-size: 0.95rem; padding: 12px 14px;
             background: #0d0d18;
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: #e4e4ec;
-            outline: none;
-            transition: border-color 0.15s;
+            border-radius: 10px; color: #e4e4ec;
+            outline: none; transition: border-color 0.15s;
         }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             border-color: rgba(59,130,246,0.4);
         }
         .form-group textarea { resize: vertical; min-height: 80px; }
         .form-group select option { background: #0d0d18; color: #e4e4ec; }
-
         .row { display: flex; gap: 1rem; flex-wrap: wrap; }
         .row .form-group { flex: 1; min-width: 200px; }
-
         .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.12s, box-shadow 0.12s;
-            width: 100%;
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 8px; padding: 14px 28px; border-radius: 12px;
+            font-size: 1rem; font-weight: 700; border: none;
+            cursor: pointer; transition: transform 0.12s, box-shadow 0.12s;
         }
         .btn-primary {
             background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            color: #fff;
+            color: #fff; width: 100%;
         }
         .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(59,130,246,0.25); }
         .btn-secondary {
@@ -133,46 +97,39 @@
             color: #b4b4cc;
         }
         .btn-secondary:hover { background: rgba(255,255,255,0.1); }
-
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #fff; width: 100%;
+        }
         .output-section {
             display: none;
             background: rgba(34,197,94,0.04);
             border: 1px solid rgba(34,197,94,0.15);
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 16px; padding: 24px;
             margin-top: 1.5rem;
         }
         .output-section.visible { display: block; }
-
         .output-content {
             font-family: 'Georgia', 'Times New Roman', serif;
-            font-size: 0.95rem;
-            color: #d4d4e0;
-            line-height: 1.7;
-            padding: 20px;
-            background: #0d0d18;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            white-space: pre-wrap;
+            font-size: 0.95rem; color: #d4d4e0;
+            line-height: 1.7; padding: 20px;
+            background: #0d0d18; border-radius: 10px;
+            margin-bottom: 1rem; white-space: pre-wrap;
         }
-
+        .scan-result {
+            display: none;
+            background: rgba(59,130,246,0.06);
+            border: 1px solid rgba(59,130,246,0.15);
+            border-radius: 12px; padding: 16px;
+            margin-top: 1rem;
+        }
+        .scan-result.visible { display: block; }
+        .scan-result .item { font-size: 0.9rem; padding: 4px 0; color: #b4b4cc; }
+        .scan-result .item span { color: #e4e4ec; font-weight: 600; }
         .faq { margin-bottom: 2rem; }
         .faq-q { font-weight: 600; margin-top: 1.2rem; margin-bottom: 0.3rem; font-size: 0.93rem; }
         .faq-a { font-size: 0.88rem; color: #8b8ba3; }
-
         .fine-print { font-size: 0.8rem; color: #4b4b63; text-align: center; margin-top: 2rem; }
-
-        .price-tag {
-            text-align: center;
-            padding: 2rem;
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 16px;
-            margin: 1.5rem 0;
-        }
-        .price-tag .price { font-size: 2.5rem; font-weight: 800; }
-        .price-tag .note { color: #8b8ba3; font-size: 0.9rem; margin-top: 0.3rem; }
-
         @media (max-width: 500px) {
             .container { padding: 1.5rem; }
             .form-section { padding: 16px; }
@@ -182,299 +139,316 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="badge">Inkwell Digital &middot; ESA Tools</div>
-        <h1>Write your <em>Parent-Provided Curriculum</em> in minutes</h1>
-        <p class="subtitle">Fill in what you bought, and we generate the curriculum justification that meets AZ Department of Education standards. No more staring at a blank form.</p>
+<div class="container">
 
-        <div class="price-tag" style="display:none;">
-            <div class="price" id="priceDisplay">Free during beta</div>
-            <div class="note">Launching soon — $19 one-time per curriculum</div>
+    <div class="badge">Inkwell Digital &middot; ESA Tools</div>
+    <h1>Write your <em>Parent-Provided Curriculum</em> in minutes</h1>
+    <p class="subtitle">Upload a receipt, paste receipt text, or fill in the form — we generate the curriculum justification that meets AZ Department of Education standards.</p>
+
+    <div class="divider"></div>
+
+    <h2>Step 1: Upload your receipt</h2>
+    <div class="form-section">
+        <h3>Paste Receipt Text</h3>
+        <div class="form-group">
+            <label>Copy and paste your receipt here</label>
+            <textarea id="receiptText" placeholder="Walmart
+123 Main St
+Date: 03/15/2025
+
+Desk           149.99
+Desk Lamp       24.99
+Pencils 12pk     3.49
+
+Subtotal       178.47
+Tax             14.28
+Total         $192.75
+Visa **** 1234" style="min-height:160px; font-family: 'Courier New', monospace; font-size: 0.88rem;"></textarea>
         </div>
+        <button class="btn btn-primary" onclick="scanReceipt()">Scan Receipt</button>
+        <p style="font-size:0.82rem; color:#6b6b83; margin-top:0.5rem;">We'll extract the vendor, items, and total automatically.</p>
 
-        <div class="divider"></div>
-
-        <h2>Tell us about your purchase</h2>
-
-        <div class="form-section">
-            <h3>Student Information</h3>
-            <div class="row">
-                <div class="form-group">
-                    <label>Student name</label>
-                    <input type="text" id="studentName" placeholder="First and last name">
-                </div>
-                <div class="form-group">
-                    <label>Student application ID#</label>
-                    <input type="text" id="studentId" placeholder="From your ESA account">
-                </div>
-            </div>
+        <div class="scan-result" id="scanResult">
+            <p style="font-size:0.9rem; font-weight:600; margin-bottom:8px;">&#9989; Receipt scanned</p>
+            <div id="scanDetails"></div>
         </div>
-
-        <div class="form-section">
-            <h3>Curriculum Details</h3>
-            <div class="row">
-                <div class="form-group">
-                    <label>Subject</label>
-                    <select id="subject">
-                        <option value="">Select subject...</option>
-                        <option value="Reading">Reading</option>
-                        <option value="Grammar">Grammar</option>
-                        <option value="Mathematics">Mathematics</option>
-                        <option value="Science">Science</option>
-                        <option value="Social Studies">Social Studies</option>
-                        <option value="Art">Art</option>
-                        <option value="Music">Music</option>
-                        <option value="Physical Education">Physical Education</option>
-                        <option value="Foreign Language">Foreign Language</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Grade level</label>
-                    <select id="grade">
-                        <option value="">Select grade...</option>
-                        <option value="PK">PK</option>
-                        <option value="K">K</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>What did you purchase?</label>
-                <input type="text" id="purchaseItem" placeholder="e.g., Desk, art supplies, math workbook, microscope">
-            </div>
-
-            <div class="form-group">
-                <label>Learning objective (optional — we'll generate one)</label>
-                <textarea id="learningObjective" placeholder="Leave blank and we'll write one based on your subject and purchase"></textarea>
-            </div>
-        </div>
-
-        <div class="form-section">
-            <h3>Purchase Details (for ESA records)</h3>
-            <div class="row">
-                <div class="form-group">
-                    <label>Vendor</label>
-                    <input type="text" id="vendor" placeholder="Amazon, Staples, etc.">
-                </div>
-                <div class="form-group">
-                    <label>Amount ($)</label>
-                    <input type="text" id="amount" placeholder="0.00">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Why is this educationally necessary? (optional)</label>
-                <textarea id="justification" placeholder="e.g., This desk provides a dedicated workspace for focused study..."></textarea>
-            </div>
-        </div>
-
-        <button class="btn btn-primary" onclick="generateCurriculum()">&#9889; Generate Curriculum</button>
-
-        <div class="output-section" id="outputSection">
-            <h2 style="margin-bottom: 0.5rem;">Your Curriculum</h2>
-            <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:1rem;">Copy this into the AZ DOE Parent-Provided Curriculum form, or print it directly.</p>
-            <div class="output-content" id="outputContent"></div>
-            <button class="btn btn-secondary" onclick="copyOutput()">&#128203; Copy to Clipboard</button>
-            <button class="btn btn-secondary" style="margin-top:8px;" onclick="printOutput()">&#128424; Print</button>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="faq">
-            <h2 style="margin-bottom: 0.5rem;">How it works</h2>
-            <div class="faq-q">What is a Parent-Provided Curriculum?</div>
-            <div class="faq-a">Arizona ESA parents must submit a curriculum showing why their purchases meet the AZ Department of Education criteria. This form is required for all ESA purchases beyond auto-approved items.</div>
-
-            <div class="faq-q">What makes a purchase "allowable"?</div>
-            <div class="faq-a">It must be directly related to a course of study. A desk supports focused study time. Art supplies support a visual arts curriculum. A microscope supports science observation. Our generator connects your purchase to a valid learning objective.</div>
-
-            <div class="faq-q">Is this approved by the AZ Department of Education?</div>
-            <div class="faq-a">This tool helps you format your curriculum following the official template. You are responsible for ensuring the content accurately reflects your child's education.</div>
-
-            <div class="faq-q">What about the ESA debit card receipts?</div>
-            <div class="faq-a">The curriculum covers the "why." You still need to submit receipts through ClassWallet. This tool helps you create the curriculum justification that supports those receipts.</div>
-        </div>
-
-        <div class="divider"></div>
-        <div class="fine-print">Inkwell Digital — connorarutherford@gmail.com</div>
     </div>
 
-    <script>
-    const learningObjectives = {
-        'Mathematics': {
-            'K': 'Develop foundational number sense, counting, and basic operations through hands-on activities and manipulatives.',
-            '1': 'Build fluency in addition and subtraction within 20, understand place value, and measure and compare lengths.',
-            '2': 'Develop fluency in addition and subtraction within 100, understand place value to 1,000, and work with time and money.',
-            '3': 'Multiply and divide within 100, develop understanding of fractions, and solve problems involving area and perimeter.',
-            '4': 'Use place value understanding to perform multi-digit arithmetic, develop fraction equivalence, and classify geometric figures.',
-            '5': 'Perform operations with multi-digit whole numbers and decimals to hundredths, develop understanding of fractions as division, and understand volume.',
-            '6': 'Reason about ratios and rates, complete operations with fractions and decimals, and understand rational numbers and expressions.',
-            '7': 'Develop understanding of proportional relationships, operations with rational numbers, and work with expressions and linear equations.',
-            '8': 'Understand functions, analyze two- and three-dimensional space and figures using distance, angle, and transformations.',
+    <div class="divider"></div>
+
+    <h2>Step 2: Student & Curriculum Info</h2>
+
+    <div class="form-section">
+        <h3>Student Information</h3>
+        <div class="row">
+            <div class="form-group">
+                <label>Student name</label>
+                <input type="text" id="studentName" placeholder="First and last name">
+            </div>
+            <div class="form-group">
+                <label>Student application ID#</label>
+                <input type="text" id="studentId" placeholder="From your ESA account">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h3>Curriculum Details</h3>
+        <div class="row">
+            <div class="form-group">
+                <label>Subject</label>
+                <select id="subject">
+                    <option value="">Select subject...</option>
+                    <option value="Reading">Reading</option>
+                    <option value="Grammar">Grammar</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Science">Science</option>
+                    <option value="Social Studies">Social Studies</option>
+                    <option value="Art">Art</option>
+                    <option value="Music">Music</option>
+                    <option value="Physical Education">Physical Education</option>
+                    <option value="Foreign Language">Foreign Language</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Grade level</label>
+                <select id="grade">
+                    <option value="">Select grade...</option>
+                    <option value="PK">PK</option>
+                    <option value="K">K</option>
+                    <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                    <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                    <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                    <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Item(s) purchased</label>
+            <input type="text" id="purchaseItem" placeholder="e.g., Desk, art supplies">
+        </div>
+
+        <div class="form-group">
+            <label>Vendor</label>
+            <input type="text" id="vendor" placeholder="Amazon, Staples, etc.">
+        </div>
+
+        <div class="form-group">
+            <label>Amount ($)</label>
+            <input type="text" id="amount" placeholder="0.00">
+        </div>
+
+        <div class="form-group">
+            <label>Why is this educationally necessary? (optional)</label>
+            <textarea id="justification" placeholder="e.g., This desk provides a dedicated workspace for focused study..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Custom learning objective (optional — leave blank for auto-generated)</label>
+            <textarea id="learningObjective" placeholder="We'll write one based on your subject and purchase"></textarea>
+        </div>
+    </div>
+
+    <button class="btn btn-success" onclick="generateCurriculum()">&#9889; Generate Curriculum</button>
+
+    <div class="output-section" id="outputSection">
+        <h2 style="margin-bottom: 0.5rem;">Your Curriculum</h2>
+        <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:1rem;">Copy this into the AZ DOE form or print it.</p>
+        <div class="output-content" id="outputContent"></div>
+        <button class="btn btn-secondary" onclick="copyOutput()">&#128203; Copy to Clipboard</button>
+        <button class="btn btn-secondary" style="margin-top:8px;" onclick="printOutput()">&#128424; Print</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="faq">
+        <h2 style="margin-bottom: 0.5rem;">How it works</h2>
+        <div class="faq-q">What is a Parent-Provided Curriculum?</div>
+        <div class="faq-a">Arizona ESA parents must submit a curriculum showing why their purchases meet AZ DOE criteria. Required for all purchases beyond auto-approved items.</div>
+        <div class="faq-q">Do I still need to submit receipts?</div>
+        <div class="faq-a">Yes. This generates the curriculum justification. Receipts still go through ClassWallet. The curriculum supports your receipts with an educational rationale.</div>
+        <div class="faq-q">Is this approved by AZ DOE?</div>
+        <div class="faq-a">This tool formats your curriculum following the official template. You are responsible for accuracy.</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="fine-print">Inkwell Digital — connorarutherford@gmail.com</div>
+</div>
+
+<script>
+// ─── Learning Objective Library ────────────────────────────────────────────
+const learningObjectives = {
+    'Mathematics': {
+        'K': 'Develop foundational number sense, counting, and basic operations through hands-on activities and manipulatives.',
+        '1': 'Build fluency in addition and subtraction within 20, understand place value, and measure and compare lengths.',
+        '2': 'Develop fluency in addition and subtraction within 100, understand place value to 1,000, and work with time and money.',
+        '3': 'Multiply and divide within 100, develop understanding of fractions, and solve problems involving area and perimeter.',
+        '4': 'Use place value understanding to perform multi-digit arithmetic, develop fraction equivalence, and classify geometric figures.',
+        '5': 'Perform operations with multi-digit whole numbers and decimals to hundredths, develop understanding of fractions as division.',
+        '6': 'Reason about ratios and rates, complete operations with fractions and decimals, and understand rational numbers and expressions.',
+        '7': 'Develop understanding of proportional relationships, operations with rational numbers, and work with expressions and linear equations.',
+        '8': 'Understand functions, analyze two- and three-dimensional space using distance, angle, and transformations.',
+    },
+    'Reading': {
+        'K': 'Develop phonemic awareness, letter recognition, and foundational reading skills through guided practice and decodable texts.',
+        '1': 'Build decoding skills, reading fluency, and comprehension of grade-level literary and informational texts.',
+        '2': 'Read with sufficient accuracy and fluency, determine central messages, and describe how characters respond.',
+        '3': 'Read and comprehend literary and informational texts at grade level, determine main ideas, and explain text structure.',
+        '4': 'Refer to details in texts, determine themes, and integrate information from multiple sources.',
+        '5': 'Quote accurately from texts, analyze characters and setting, and compare text structures.',
+        '6': 'Cite textual evidence, analyze plot development, and determine an author\'s point of view.',
+        '7': 'Analyze how story elements interact, trace argument development, and compare media representations.',
+        '8': 'Analyze how dialogue and incidents propel action, evaluate arguments, and analyze point of view.',
+    },
+    'Science': {
+        'K': 'Explore the natural world through observation and inquiry, including plants, animals, weather, and physical properties.',
+        '1': 'Investigate patterns in the natural world, including life cycles, sound and light, and the sun-moon-star patterns.',
+        '2': 'Examine how living things grow, explore states of matter, and understand earth\'s natural processes.',
+        '3': 'Investigate forces and motion, explore ecosystems and life cycles, and study weather and climate patterns.',
+        '4': 'Explore energy transfer, study earth\'s systems, and investigate plant and animal structures.',
+        '5': 'Understand matter and its interactions, study the flow of energy through ecosystems, and explore space systems.',
+    },
+    'Social Studies': {
+        'K': 'Develop awareness of self, family, and community through exploration of roles, responsibilities, and cultural traditions.',
+        '1': 'Explore maps and geography, learn about historical figures and events, and understand civic responsibilities.',
+        '2': 'Study how communities develop, explore economic concepts, and learn about government structures.',
+        '3': 'Investigate Arizona history, geography, and government, and develop map skills and historical thinking.',
+        '4': 'Explore United States geography, early American history through the Revolution, and foundational civic principles.',
+        '5': 'Study the development of the United States from the Constitution through Reconstruction.',
+    },
+    'Art': {
+        'K': 'Explore color, shape, and texture through drawing, painting, and sculpture to develop creative expression.',
+        '1': 'Identify and use the elements of art — line, shape, color, and texture — in original works.',
+        '2': 'Apply knowledge of color theory, pattern, and balance to create artworks that communicate personal expression.',
+        '3': 'Experiment with art materials and techniques to create works demonstrating skill and creativity.',
+        '4': 'Explore the principles of design through multi-step art projects.',
+        '5': 'Create artworks reflecting observation, imagination, and personal experience using advanced techniques.',
+    },
+    'Grammar': {
+        'K': 'Recognize letters, understand sentences, and use capitalization and punctuation in simple writing.',
+        '1': 'Use complete sentences, capitalize dates and names, use ending punctuation.',
+        '2': 'Use collective nouns, past tense verbs, adjectives, and produce simple compound sentences.',
+        '3': 'Use parts of speech correctly, produce simple and compound sentences, and use commas.',
+        '4': 'Use relative pronouns and adverbs, produce complete sentences, and use commas and quotation marks.',
+    },
+    'Other': {
+        'default': 'Develop knowledge and skills in the selected subject area through structured lessons, hands-on activities, and applied practice aligned with Arizona academic standards.',
+    }
+};
+
+function getObjective(subject, grade) {
+    if (subject && learningObjectives[subject]) {
+        if (learningObjectives[subject][grade]) return learningObjectives[subject][grade];
+        if (learningObjectives[subject]['default']) return learningObjectives[subject]['default'];
+    }
+    return `Develop foundational knowledge and skills in ${(subject || 'this subject').toLowerCase()} through guided instruction, hands-on activities, and practice aligned with Arizona academic standards.`;
+}
+
+// ─── Lesson Plan Generator ─────────────────────────────────────────────────
+function generateLessonPlan(subject, purchaseItem) {
+    const item = purchaseItem || 'instructional materials';
+    const s = subject || 'this subject';
+    return {
+        lesson1: {
+            title: `Introduction to ${s} Concepts`,
+            activities: [
+                `Introduction to key ${s.toLowerCase()} concepts and learning objectives.`,
+                `Guided instruction using ${item} to demonstrate core principles.`,
+                'Guided practice applying concepts through structured activities.',
+                'Review and assessment to check understanding.'
+            ]
         },
-        'Reading': {
-            'K': 'Develop phonemic awareness, letter recognition, and foundational reading skills through guided practice and decodable texts.',
-            '1': 'Build decoding skills, reading fluency, and comprehension of grade-level literary and informational texts.',
-            '2': 'Read with sufficient accuracy and fluency, determine central messages, and describe how characters respond to events.',
-            '3': 'Read and comprehend literary and informational texts at grade level, determine main ideas, and explain text structure.',
-            '4': 'Refer to details and examples in texts, determine themes, and integrate information from multiple sources.',
-            '5': 'Quote accurately from texts, analyze characters and setting, and compare and contrast text structures.',
-            '6': 'Cite textual evidence, analyze plot development, and determine an author\'s point of view or purpose.',
-            '7': 'Analyze how elements of a story interact, trace argument development, and compare different media representations.',
-            '8': 'Analyze how dialogue and incidents propel action, evaluate argument and claims, and analyze point of view.',
-        },
-        'Science': {
-            'K': 'Explore the natural world through observation and inquiry, including plants, animals, weather, and physical properties.',
-            '1': 'Investigate patterns in the natural world, including life cycles, sound and light, and the sun-moon-star patterns.',
-            '2': 'Examine how living things grow and change, explore states of matter, and understand earth\'s natural processes.',
-            '3': 'Investigate forces and motion, explore ecosystems and life cycles, and study weather and climate patterns.',
-            '4': 'Explore energy transfer, study earth\'s systems and processes, and investigate plant and animal structures.',
-            '5': 'Understand matter and its interactions, study the flow of energy through ecosystems, and explore space systems.',
-        },
-        'Social Studies': {
-            'K': 'Develop awareness of self, family, and community through exploration of roles, responsibilities, and cultural traditions.',
-            '1': 'Explore maps and geography, learn about historical figures and events, and understand civic responsibilities.',
-            '2': 'Study how communities develop and change, explore economic concepts, and learn about government structures.',
-            '3': 'Investigate Arizona history, geography, and government, and develop map skills and historical thinking.',
-            '4': 'Explore United States geography, early American history through the Revolution, and foundational civic principles.',
-            '5': 'Study the development of the United States from the Constitution through Reconstruction, including westward expansion.',
-        },
-        'Art': {
-            'K': 'Explore color, shape, and texture through drawing, painting, and sculpture to develop creative expression.',
-            '1': 'Identify and use the elements of art — line, shape, color, and texture — in original works of art.',
-            '2': 'Apply knowledge of color theory, pattern, and balance to create artworks that communicate personal expression.',
-            '3': 'Experiment with a variety of art materials and techniques to create works that demonstrate skill and creativity.',
-            '4': 'Explore the principles of design, including contrast, emphasis, and unity, through multi-step art projects.',
-            '5': 'Create artworks that reflect observation, imagination, and personal experience using advanced techniques.',
-        },
-        'Music': {
-            'K': 'Explore musical concepts through singing, movement, and playing simple instruments to develop rhythmic awareness.',
-            '1': 'Demonstrate steady beat, identify high and low pitches, and perform simple rhythmic patterns.',
-            '2': 'Read and perform basic rhythmic notation, distinguish between different musical forms, and sing in groups.',
-            '3': 'Read and perform melodies, understand basic music notation, and describe music using grade-appropriate vocabulary.',
-            '4': 'Perform music with expression, read standard notation, and describe musical elements in listening selections.',
-        },
-        'Physical Education': {
-            'K': 'Develop foundational motor skills, spatial awareness, and cooperative play through structured physical activities.',
-            '1': 'Demonstrate locomotor and manipulative skills, understand movement concepts, and participate in cooperative games.',
-            '2': 'Apply movement concepts to a variety of physical activities and demonstrate responsible personal and social behavior.',
-            '3': 'Develop competence in a variety of motor skills and understand the benefits of regular physical activity.',
-            '4': 'Demonstrate intermediate-level skills in selected physical activities and assess personal fitness levels.',
-        },
-        'Grammar': {
-            'K': 'Recognize letters, understand that sentences are made of words, and use capitalization and punctuation in simple writing.',
-            '1': 'Use complete sentences, capitalize dates and names, use ending punctuation, and spell grade-appropriate words.',
-            '2': 'Use collective nouns, past tense verbs, adjectives, and produce simple compound sentences with correct punctuation.',
-            '3': 'Use parts of speech correctly, produce simple and compound sentences, and use commas in addresses and dialogue.',
-            '4': 'Use relative pronouns and adverbs, produce complete sentences avoiding fragments, and use commas and quotation marks.',
-            '5': 'Use verb tenses, correlative conjunctions, punctuation for lists and introductory elements, and expand sentences.',
-        },
-        'Foreign Language': {
-            'K': 'Introduce basic vocabulary, greetings, and cultural awareness through songs, games, and simple conversations.',
-            '1': 'Build vocabulary for familiar objects and actions, respond to simple questions, and understand basic cultural practices.',
-            '2': 'Use simple sentences to describe people, places, and things, and demonstrate understanding of written and spoken phrases.',
-            '3': 'Engage in short conversations, read and write simple sentences, and identify cultural products and practices.',
-            '4': 'Express opinions and preferences, narrate events in present tense, and understand main ideas in authentic materials.',
-        },
-        'Other': {
-            'default': 'Develop knowledge and skills in the selected subject area through structured lessons, hands-on activities, and applied practice aligned with Arizona academic standards.',
+        lesson2: {
+            title: `Applying ${s} Skills`,
+            activities: [
+                'Review of previously learned concepts and introduction of new material.',
+                `Hands-on application using ${item} to reinforce understanding.`,
+                'Independent practice with guidance and feedback.',
+                'Reflection and connection to real-world applications.'
+            ]
         }
     };
+}
 
-    function getObjective(subject, grade) {
-        if (learningObjectives[subject] && learningObjectives[subject][grade]) {
-            return learningObjectives[subject][grade];
+// ─── Receipt Scanner ───────────────────────────────────────────────────────
+function scanReceipt() {
+    const text = document.getElementById('receiptText').value.trim();
+    if (!text) { alert('Paste a receipt first.'); return; }
+
+    const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+    let vendor = '';
+    let total = '';
+    let items = [];
+    let inItems = false;
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        // First non-empty line is usually the vendor
+        if (i === 0 && !line.match(/^[0-9/$]/)) {
+            vendor = line;
+            continue;
         }
-        if (learningObjectives[subject] && learningObjectives[subject]['default']) {
-            return learningObjectives[subject]['default'];
+
+        // Detect total line
+        if (line.match(/^total/i) || line.match(/^total/i)) {
+            const m = line.match(/\$?([0-9,]+\.\d{2})/);
+            if (m) total = m[1];
+            break;
         }
-        return `Develop foundational knowledge and skills in ${subject.toLowerCase()} through guided instruction, hands-on activities, and practice aligned with Arizona academic standards.`;
+
+        // Skip header/date/address lines
+        if (line.match(/^date/i) || line.match(/^subtotal/i) || line.match(/^tax/i) || line.match(/\d+\/\d+\/\d+/)) continue;
+
+        // Detect item lines (have a price at the end)
+        const itemMatch = line.match(/^(.+?)\s+(\$?[0-9,]+\.\d{2})\s*$/);
+        if (itemMatch && !line.match(/^subtotal/i) && !line.match(/^tax/i) && !line.match(/^total/i)) {
+            items.push(itemMatch[1].trim());
+        }
     }
 
-    function generateLessonPlan(subject, grade, purchaseItem) {
-        const item = purchaseItem || 'instructional materials';
-        const plans = {
-            'Art': {
-                'lesson1': {
-                    'title': 'Exploring Artistic Techniques',
-                    'activities': [
-                        `Introduction to key concepts and techniques in visual arts using ${item}.`,
-                        'Guided demonstration and exploration of materials and methods.',
-                        'Hands-on practice creating original works that apply the techniques discussed.',
-                        'Group discussion and reflection on the creative process and results.'
-                    ]
-                },
-                'lesson2': {
-                    'title': 'Applying Skills to a Themed Project',
-                    'activities': [
-                        'Review of previously learned techniques and discussion of how they can be combined.',
-                        'Planning and sketching a themed artwork incorporating multiple techniques.',
-                        'Creation of final artwork using ${item} and other materials.',
-                        'Presentation and critique session to develop artistic vocabulary and self-assessment.'
-                    ]
-                }
-            },
-            'default': {
-                'lesson1': {
-                    'title': `Introduction to ${subject} Concepts`,
-                    'activities': [
-                        `Introduction to key ${subject.toLowerCase()} concepts and learning objectives.`,
-                        `Guided instruction using ${item} to demonstrate core principles.`,
-                        'Guided practice and application of concepts through structured activities.',
-                        'Review and assessment to check understanding and retention.'
-                    ]
-                },
-                'lesson2': {
-                    'title': `Applying ${subject} Skills`,
-                    'activities': [
-                        'Review of previously learned concepts and introduction of new material.',
-                        `Hands-on application using ${item} to reinforce and extend understanding.`,
-                        'Independent practice with teacher guidance and feedback.',
-                        'Reflection and connection to real-world applications of the material.'
-                    ]
-                }
-            }
-        };
+    // Auto-fill form
+    if (vendor) document.getElementById('vendor').value = vendor;
+    if (total) document.getElementById('amount').value = total;
+    if (items.length) document.getElementById('purchaseItem').value = items.join(', ');
 
-        const plan = plans[subject] || plans['default'];
-        return plan;
+    // Show scan result
+    const details = document.getElementById('scanDetails');
+    details.innerHTML = `
+        <div class="item">Vendor: <span>${vendor || '(not detected)'}</span></div>
+        <div class="item">Items: <span>${items.slice(0, 3).join(', ')}${items.length > 3 ? ' (+' + (items.length-3) + ' more)' : ''}</span></div>
+        <div class="item">Total: <span>$${total || '(not detected)'}</span></div>
+    `;
+    document.getElementById('scanResult').classList.add('visible');
+
+    // Auto-scroll to the curriculum form
+    document.getElementById('subject').focus();
+}
+
+// ─── Curriculum Generator ──────────────────────────────────────────────────
+function generateCurriculum() {
+    const studentName = document.getElementById('studentName').value.trim();
+    const studentId = document.getElementById('studentId').value.trim();
+    const subject = document.getElementById('subject').value;
+    const grade = document.getElementById('grade').value;
+    const purchaseItem = document.getElementById('purchaseItem').value.trim();
+    const vendor = document.getElementById('vendor').value.trim();
+    const amount = document.getElementById('amount').value.trim();
+    const justification = document.getElementById('justification').value.trim();
+    const customObjective = document.getElementById('learningObjective').value.trim();
+
+    if (!studentName || !studentId || !subject || !grade) {
+        alert('Please fill in student name, ID, subject, and grade level.');
+        return;
     }
 
-    function generateCurriculum() {
-        const studentName = document.getElementById('studentName').value.trim();
-        const studentId = document.getElementById('studentId').value.trim();
-        const subject = document.getElementById('subject').value;
-        const grade = document.getElementById('grade').value;
-        const purchaseItem = document.getElementById('purchaseItem').value.trim();
-        const customObjective = document.getElementById('learningObjective').value.trim();
-        const vendor = document.getElementById('vendor').value.trim();
-        const amount = document.getElementById('amount').value.trim();
-        const justification = document.getElementById('justification').value.trim();
+    const objective = customObjective || getObjective(subject, grade);
+    const plan = generateLessonPlan(subject, purchaseItem);
+    const item = purchaseItem || 'instructional materials';
 
-        // Validation
-        if (!studentName || !studentId || !subject || !grade) {
-            alert('Please fill in student name, ID, subject, and grade level.');
-            return;
-        }
-
-        const objective = customObjective || getObjective(subject, grade);
-        const lessonPlan = generateLessonPlan(subject, grade, purchaseItem);
-        const purchaseLine = purchaseItem ? `Purchase: ${purchaseItem}${vendor ? ' from ' + vendor : ''}${amount ? ' ($' + amount + ')' : ''}` : '';
-        const justificationLine = justification ? `\nJustification: ${justification}` : '';
-
-        const output = `PARENT-PROVIDED CURRICULUM
+    const output = `PARENT-PROVIDED CURRICULUM
 Arizona Empowerment Scholarship Account (ESA)
 School Year 2025-2026
 
@@ -482,52 +456,52 @@ Student name: ${studentName}
 Student application ID#: ${studentId}
 
 Subject: ${subject}
-Grade level: ${grade || 'Not specified'}
-${purchaseLine ? '\n' + purchaseLine : ''}
-${justificationLine}
+Grade level: ${grade}
+${vendor ? 'Vendor: ' + vendor : ''}
+${amount ? 'Amount: $' + amount : ''}
+${purchaseItem ? '\nPurchase: ' + purchaseItem : ''}
+${justification ? '\nEducational justification:\n' + justification : ''}
 
 Learning objective:
 ${objective}
 
 Method of teaching / lesson plans / activities:
 
-Lesson 1: ${lessonPlan.lesson1.title}
-${lessonPlan.lesson1.activities.map((a, i) => `${i + 1}. ${a.replace('${item}', purchaseItem || 'instructional materials').replace('${subject}', subject)}`).join('\n')}
+Lesson 1: ${plan.lesson1.title}
+${plan.lesson1.activities.map((a, i) => `  ${i+1}. ${a}`).join('\n')}
 
-Lesson 2: ${lessonPlan.lesson2.title}
-${lessonPlan.lesson2.activities.map((a, i) => `${i + 1}. ${a.replace('${item}', purchaseItem || 'instructional materials').replace('${subject}', subject)}`).join('\n')}
+Lesson 2: ${plan.lesson2.title}
+${plan.lesson2.activities.map((a, i) => `  ${i+1}. ${a}`).join('\n')}
 
 ${purchaseItem ? 'Materials:\n• ' + purchaseItem : ''}
 
 Additional notes:
 This curriculum is provided as a parent-planned course of study for the ${subject.toLowerCase()} content area at the ${grade} grade level. All materials listed are directly related to and required for the lessons described above.`;
 
-        document.getElementById('outputContent').textContent = output;
-        document.getElementById('outputSection').classList.add('visible');
-        document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    document.getElementById('outputContent').textContent = output;
+    document.getElementById('outputSection').classList.add('visible');
+    document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
-    function copyOutput() {
-        const text = document.getElementById('outputContent').textContent;
-        navigator.clipboard.writeText(text).then(() => {
-            const btn = document.querySelector('.output-section .btn-secondary');
-            const original = btn.textContent;
-            btn.textContent = '✅ Copied!';
-            setTimeout(() => btn.textContent = original, 2000);
-        });
-    }
+function copyOutput() {
+    const text = document.getElementById('outputContent').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.output-section .btn-secondary');
+        const original = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => btn.textContent = original, 2000);
+    });
+}
 
-    function printOutput() {
-        const content = document.getElementById('outputContent').textContent;
-        const win = window.open('', '', 'width=800,height=600');
-        win.document.write('<html><head><title>Parent-Provided Curriculum</title>');
-        win.document.write('<style>body { font-family: Georgia, serif; padding: 40px; line-height: 1.6; white-space: pre-wrap; }</style>');
-        win.document.write('</head><body>');
-        win.document.write('<pre style="font-family: Georgia, serif; white-space: pre-wrap;">' + content + '</pre>');
-        win.document.write('</body></html>');
-        win.document.close();
-        win.print();
-    }
-    </script>
+function printOutput() {
+    const content = document.getElementById('outputContent').textContent;
+    const win = window.open('', '', 'width=800,height=600');
+    win.document.write('<html><head><title>Parent-Provided Curriculum</title>');
+    win.document.write('<style>body { font-family: Georgia, serif; padding: 40px; line-height: 1.6; white-space: pre-wrap; }</style>');
+    win.document.write('</head><body><pre style="font-family:Georgia,serif;white-space:pre-wrap;">' + content + '</pre></body></html>');
+    win.document.close();
+    win.print();
+}
+</script>
 </body>
 </html>
