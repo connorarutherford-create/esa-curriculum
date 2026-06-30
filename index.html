@@ -4,6 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESA Curriculum Builder — Inkwell Digital</title>
+    <meta name="description" content="Free Arizona ESA Parent-Provided Curriculum builder. Generate PPCs for homeschool with AI. Receipt scanning, lesson plans, and justification — built for AZ families.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="ESA Curriculum Builder — Inkwell Digital">
+    <meta property="og:description" content="Free Arizona ESA Parent-Provided Curriculum builder. Generate PPCs, scan receipts, and compile lesson plans for homeschool.">
+    <meta property="og:url" content="https://connorarutherford-create.github.io/esa-curriculum/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://connorarutherford-create.github.io/esa-curriculum/">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -115,21 +123,26 @@
 <div class="step active" data-step="1">
     <div class="card">
         <h3>&#128247; Scan or Paste Receipt</h3>
-        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1rem;">Upload a receipt photo or paste the text. We'll extract vendor and items. (Optional — skip if you don't have a receipt.)</p>
+        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1.2rem;">Upload a receipt photo or paste the text. We'll extract vendor and items. (Optional — skip if you don't have a receipt.)</p>
         <input type="file" id="receiptUpload" accept="image/*" capture="environment" onchange="handleFilePick(this)" style="display:none;">
-        <div class="upload-area" onclick="document.getElementById('receiptUpload').click()">
-            <div class="icon">&#128247;</div>
-            <div class="text" id="fileLabel">Tap to choose a receipt photo...</div>
+        <div class="upload-area" onclick="document.getElementById('receiptUpload').click()" style="cursor:pointer; background:#0d0d18; border:1.5px dashed rgba(255,255,255,0.12); border-radius:12px; padding:28px 24px; text-align:center; transition:border-color 0.2s, background 0.2s;" onmouseover="this.style.borderColor='rgba(59,130,246,0.3)'; this.style.background='rgba(59,130,246,0.03)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.background='#0d0d18';">
+            <div style="font-size:1.8rem; margin-bottom:8px; opacity:0.6;">&#128247;</div>
+            <div style="font-size:0.9rem; font-weight:500; color:#b4b4cc;" id="fileLabel">Choose a receipt photo</div>
+            <div style="font-size:0.8rem; color:#5a5a72; margin-top:4px;">JPG or PNG</div>
         </div>
-        <p style="text-align:center; font-size:0.85rem; color:#6b6b83; margin:0.8rem 0;">or</p>
-        <textarea id="receiptText" placeholder="Paste receipt text here..." style="min-height:80px;"></textarea>
-        <div class="btn-row" style="margin-top:8px;">
-            <button class="btn btn-ghost" onclick="skipStep()">Skip</button>
+        <div style="display:flex; align-items:center; gap:12px; margin:1rem 0;">
+            <div style="flex:1; height:1px; background:rgba(255,255,255,0.06);"></div>
+            <span style="font-size:0.8rem; color:#5a5a72; text-transform:uppercase; letter-spacing:0.05em;">or</span>
+            <div style="flex:1; height:1px; background:rgba(255,255,255,0.06);"></div>
+        </div>
+        <textarea id="receiptText" placeholder="Paste receipt text here..." style="min-height:80px; font-size:0.9rem;"></textarea>
+        <div class="btn-row" style="margin-top:10px;">
+            <button class="btn btn-ghost" onclick="skipStep()" style="flex:0.4;">Skip</button>
             <button class="btn btn-primary" onclick="scanReceiptAndAdvance()">Scan &amp; Continue</button>
         </div>
-        <div id="receiptResult" style="display:none; margin-top:12px; padding:12px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.12); border-radius:10px;">
-            <p style="color:#22c55e; font-weight:600; margin-bottom:6px;">&#9989; Receipt scanned</p>
-            <div id="receiptDetails" style="font-size:0.88rem; color:#8b8ba3;"></div>
+        <div id="receiptResult" style="display:none; margin-top:12px; padding:14px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.15); border-radius:10px;">
+            <p style="color:#22c55e; font-weight:600; margin-bottom:6px; font-size:0.9rem;">&#9989; Receipt scanned</p>
+            <div id="receiptDetails" style="font-size:0.85rem; color:#8b8ba3;"></div>
         </div>
     </div>
 </div>
@@ -264,6 +277,7 @@ Objective 3" style="min-height:80px;"></textarea>
                 </div>
             </div>
         </div>
+        <textarea id="aiLessonPlan" style="display:none;"></textarea>
         <button class="btn btn-ghost" onclick="addUnit()" style="width:100%; padding:10px; margin-top:8px;">+ Add unit</button>
         <div class="btn-row" style="margin-top:1rem;">
             <button class="btn btn-ghost" onclick="prevStep()">Back</button>
@@ -558,7 +572,8 @@ Paragraph explaining why this course is essential for homeschooling.`;
             if (s.match(/^SCOPE/i)) document.getElementById('scopeOfStudy').value = s.replace(/^SCOPE:?\s*/i, '').trim();
             else if (s.match(/^OBJECTIVES/i)) {
                 document.getElementById('objectives').value = s.replace(/^OBJECTIVES:?\s*/i, '').replace(/^[-*]\s*/gm, '').trim();
-            } else if (s.match(/^JUSTIFICATION/i)) document.getElementById('homeschoolJust').value = s.replace(/^JUSTIFICATION:?\s*/i, '').trim();
+            } else if (s.match(/^LESSONS?/i)) document.getElementById('aiLessonPlan').value = s.replace(/^LESSONS?:?\s*/i, '').trim();
+            else if (s.match(/^JUSTIFICATION/i)) document.getElementById('homeschoolJust').value = s.replace(/^JUSTIFICATION:?\s*/i, '').trim();
         });
         btn.textContent = '✅ Generated';
         setTimeout(() => { btn.textContent = '✨ Generate with AI'; btn.disabled = false; }, 2000);
@@ -604,6 +619,11 @@ function compilePPC() {
             if (g) units += 'Goal/Task: ' + g + '\n';
         }
     });
+
+    if (!units.trim()) {
+        const aiUnits = document.getElementById('aiLessonPlan').value.trim();
+        if (aiUnits) units = '\n' + aiUnits;
+    }
 
     const objLines = objs ? objs.split('\n').filter(l => l.trim()).map(l => '• ' + l.trim()).join('\n') : '';
     const title = ct || (subj + ' — ' + sn.split(' ')[0] + '\'s Learning Plan');
