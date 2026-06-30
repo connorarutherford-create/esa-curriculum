@@ -27,14 +27,24 @@
         .sub { text-align: center; font-size: 0.9rem; color: #8b8ba3; margin-bottom: 1.5rem; }
 
         .step-indicator {
-            display: flex; justify-content: center; gap: 6px; margin-bottom: 1.5rem;
+            display: flex; justify-content: center; gap: 8px; margin-bottom: 1.5rem;
+        }
+        .step-item {
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+            flex: 1; max-width: 90px;
         }
         .step-dot {
-            width: 32px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1);
-            transition: background 0.3s;
+            width: 100%; height: 4px; border-radius: 2px;
+            background: rgba(255,255,255,0.1); transition: background 0.3s;
         }
         .step-dot.active { background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
         .step-dot.done { background: #22c55e; }
+        .step-label {
+            font-size: 0.62rem; color: #4b4b63; text-align: center;
+            transition: color 0.3s; white-space: nowrap; line-height: 1.2;
+        }
+        .step-item.active .step-label { color: #8b8ba3; }
+        .step-item.done .step-label { color: #22c55e; }
 
         .step { display: none; }
         .step.active { display: block; }
@@ -44,7 +54,13 @@
             border: 1px solid rgba(255,255,255,0.07);
             border-radius: 16px; padding: 24px; margin-bottom: 1rem;
         }
-        .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #b4b4cc; }
+        .card h3 {
+            font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #b4b4cc;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .card h3 .accent {
+            display: inline-block; width: 3px; height: 18px; border-radius: 2px; flex-shrink: 0;
+        }
 
         label { display: block; font-size: 0.85rem; font-weight: 500; color: #9a9ab0; margin-bottom: 0.3rem; }
         input, select, textarea {
@@ -124,13 +140,14 @@
 
 <div id="helpToggle" style="text-align:right; margin-bottom:0.8rem;">
     <button onclick="toggleHelp()" style="background:none; border:none; color:#6b6b83; font-size:0.8rem; cursor:pointer; padding:4px 8px; border-radius:6px;">&#10068; Need help?</button>
+    <span id="draftStatus" style="font-size:0.75rem; color:#22c55e; margin-left:8px; opacity:0; transition:opacity 0.5s;">Draft saved</span>
 </div>
 
 <div id="helpPanel" style="display:none; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:16px 20px; margin-bottom:1rem;">
     <div id="helpContent">
         <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:8px;"><strong style="color:#b4b4cc;">Quick Tips</strong></p>
         <ul id="helpTips" style="font-size:0.82rem; color:#6b6b83; padding-left:16px; margin-bottom:8px;">
-            <li>You don't need a receipt to start — skip Step 1 if you don't have one.</li>
+            <li>Start with your student's name and course — that's all you need.</li>
             <li>All fields save automatically as you type (nothing lost if you step away).</li>
             <li>Need a real example? <a href="#" onclick="return showExample()" style="color:#3b82f6;">View a sample PPC</a>.</li>
         </ul>
@@ -139,38 +156,10 @@
 
 <div class="step-indicator" id="stepDots"></div>
 
-<!-- Step 1: Receipt -->
+<!-- Step 1: Student & Course + Receipt (optional) -->
 <div class="step active" data-step="1">
     <div class="card">
-        <h3>&#128247; Scan or Paste Receipt</h3>
-        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1.2rem;">Upload a receipt photo or paste the text. We'll extract vendor and items. (Optional — skip if you don't have a receipt.)</p>
-        <input type="file" id="receiptUpload" accept="image/*" capture="environment" onchange="handleFilePick(this)" style="display:none;">
-        <div class="upload-area" onclick="document.getElementById('receiptUpload').click()" style="cursor:pointer; background:#0d0d18; border:1.5px dashed rgba(255,255,255,0.12); border-radius:12px; padding:28px 24px; text-align:center; transition:border-color 0.2s, background 0.2s;" onmouseover="this.style.borderColor='rgba(59,130,246,0.3)'; this.style.background='rgba(59,130,246,0.03)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.background='#0d0d18';">
-            <div style="font-size:1.8rem; margin-bottom:8px; opacity:0.6;">&#128247;</div>
-            <div style="font-size:0.9rem; font-weight:500; color:#b4b4cc;" id="fileLabel">Choose a receipt photo</div>
-            <div style="font-size:0.8rem; color:#5a5a72; margin-top:4px;">JPG or PNG</div>
-        </div>
-        <div style="display:flex; align-items:center; gap:12px; margin:1rem 0;">
-            <div style="flex:1; height:1px; background:rgba(255,255,255,0.06);"></div>
-            <span style="font-size:0.8rem; color:#5a5a72; text-transform:uppercase; letter-spacing:0.05em;">or</span>
-            <div style="flex:1; height:1px; background:rgba(255,255,255,0.06);"></div>
-        </div>
-        <textarea id="receiptText" placeholder="Paste receipt text here..." style="min-height:80px; font-size:0.9rem;"></textarea>
-        <div class="btn-row" style="margin-top:10px;">
-            <button class="btn btn-ghost" onclick="skipStep()" style="flex:0.4;">Skip</button>
-            <button class="btn btn-primary" onclick="scanReceiptAndAdvance()">Scan &amp; Continue</button>
-        </div>
-        <div id="receiptResult" style="display:none; margin-top:12px; padding:14px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.15); border-radius:10px;">
-            <p style="color:#22c55e; font-weight:600; margin-bottom:6px; font-size:0.9rem;">&#9989; Receipt scanned</p>
-            <div id="receiptDetails" style="font-size:0.85rem; color:#8b8ba3;"></div>
-        </div>
-    </div>
-</div>
-
-<!-- Step 2: Student & Course -->
-<div class="step" data-step="2">
-    <div class="card">
-        <h3>&#128218; Student &amp; Course</h3>
+        <h3><span class="accent" style="background:#3b82f6;"></span> &#128218; Student &amp; Course</h3>
         <div class="row">
             <div class="form-group">
                 <label>Student name</label>
@@ -216,17 +205,43 @@
                 </select>
             </div>
         </div>
+
+        <!-- Collapsible receipt section -->
+        <div style="margin-top:1.2rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.06);">
+            <button onclick="toggleReceipt()" type="button" style="background:none; border:none; color:#6b6b83; font-size:0.85rem; cursor:pointer; padding:6px 0; width:100%; text-align:left;">
+                &#128247; <span id="receiptToggleLabel">Attach a receipt (optional)</span> <span id="receiptArrow" style="float:right;">&#9660;</span>
+            </button>
+            <div id="receiptSection" style="display:none; margin-top:12px;">
+                <p style="font-size:0.82rem; color:#6b6b83; margin-bottom:0.8rem;">Upload a photo or paste text. We'll extract vendor and items to fill your materials list.</p>
+                <input type="file" id="receiptUpload" accept="image/*" capture="environment" onchange="handleFilePick(this)" style="display:none;">
+                <div class="upload-area" onclick="document.getElementById('receiptUpload').click()" style="cursor:pointer; background:#0d0d18; border:1.5px dashed rgba(255,255,255,0.12); border-radius:12px; padding:24px; text-align:center; transition:border-color 0.2s, background 0.2s;" onmouseover="this.style.borderColor='rgba(59,130,246,0.3)'; this.style.background='rgba(59,130,246,0.03)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.background='#0d0d18';">
+                    <div style="font-size:1.5rem; margin-bottom:6px; opacity:0.5;">&#128247;</div>
+                    <div style="font-size:0.85rem; font-weight:500; color:#b4b4cc;" id="fileLabel">Choose a receipt photo</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px; margin:0.8rem 0;">
+                    <div style="flex:1; height:1px; background:rgba(255,255,255,0.06);"></div>
+                    <span style="font-size:0.75rem; color:#5a5a72; text-transform:uppercase; letter-spacing:0.05em;">or</span>
+                    <div style="flex:1; height:1px; background:rgba(255,255,255,0.06);"></div>
+                </div>
+                <textarea id="receiptText" placeholder="Paste receipt text here..." style="min-height:60px; font-size:0.88rem;"></textarea>
+                <button class="btn btn-ghost" onclick="scanReceiptOnly()" style="width:100%; padding:10px; margin-top:8px; font-size:0.85rem;">Scan Receipt</button>
+                <div id="receiptResult" style="display:none; margin-top:10px; padding:12px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.15); border-radius:10px;">
+                    <p style="color:#22c55e; font-weight:600; margin-bottom:4px; font-size:0.88rem;">&#9989; Receipt scanned</p>
+                    <div id="receiptDetails" style="font-size:0.82rem; color:#8b8ba3;"></div>
+                </div>
+            </div>
+        </div>
+
         <div class="btn-row">
-            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
-            <button class="btn btn-primary" onclick="nextStep()">Continue</button>
+            <button class="btn btn-primary" onclick="nextStep()">Add Scope →</button>
         </div>
     </div>
 </div>
 
-<!-- Step 3: Scope & Objectives -->
-<div class="step" data-step="3">
+<!-- Step 2: Scope & Objectives -->
+<div class="step" data-step="2">
     <div class="card">
-        <h3>&#128214; Scope &amp; Objectives</h3>
+        <h3><span class="accent" style="background:#8b5cf6;"></span> &#128214; Scope &amp; Objectives</h3>
         <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1rem;">Describe what this course covers. Pro users can generate this with AI.</p>
         <div class="pro-section">
             <p style="font-size:0.85rem; color:#a855f7; font-weight:600; margin-bottom:4px;">&#9733; Pro Feature</p>
@@ -245,15 +260,15 @@ Objective 3" style="min-height:80px;"></textarea>
         </div>
         <div class="btn-row">
             <button class="btn btn-ghost" onclick="prevStep()">Back</button>
-            <button class="btn btn-primary" onclick="nextStep()">Continue</button>
+            <button class="btn btn-primary" onclick="nextStep()">Add Materials →</button>
         </div>
     </div>
 </div>
 
-<!-- Step 4: Materials -->
-<div class="step" data-step="4">
+<!-- Step 3: Materials -->
+<div class="step" data-step="3">
     <div class="card">
-        <h3>&#128230; Materials &amp; Justification</h3>
+        <h3><span class="accent" style="background:#22c55e;"></span> &#128230; Materials &amp; Justification</h3>
         <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1rem;">List each item and explain why it's needed for this course.</p>
         <div id="materialsList">
             <div class="file-row">
@@ -265,15 +280,15 @@ Objective 3" style="min-height:80px;"></textarea>
         <button class="btn btn-ghost" onclick="addMaterial()" style="width:100%; padding:10px; margin-top:8px;">+ Add item</button>
         <div class="btn-row" style="margin-top:1rem;">
             <button class="btn btn-ghost" onclick="prevStep()">Back</button>
-            <button class="btn btn-primary" onclick="nextStep()">Continue</button>
+            <button class="btn btn-primary" onclick="nextStep()">Plan Lessons →</button>
         </div>
     </div>
 </div>
 
-<!-- Step 5: Lesson Plan -->
-<div class="step" data-step="5">
+<!-- Step 4: Lesson Plan -->
+<div class="step" data-step="4">
     <div class="card">
-        <h3>&#128195; Lesson Plan</h3>
+        <h3><span class="accent" style="background:#f59e0b;"></span> &#128195; Lesson Plan</h3>
         <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1rem;">Describe what you'll cover each unit.</p>
         <div id="unitsList">
             <div class="unit-row">
@@ -301,15 +316,15 @@ Objective 3" style="min-height:80px;"></textarea>
         <button class="btn btn-ghost" onclick="addUnit()" style="width:100%; padding:10px; margin-top:8px;">+ Add unit</button>
         <div class="btn-row" style="margin-top:1rem;">
             <button class="btn btn-ghost" onclick="prevStep()">Back</button>
-            <button class="btn btn-primary" onclick="nextStep()">Continue</button>
+            <button class="btn btn-primary" onclick="nextStep()">Review & Justify →</button>
         </div>
     </div>
 </div>
 
-<!-- Step 6: Justification & Output -->
-<div class="step" data-step="6">
+<!-- Step 5: Justification & Output -->
+<div class="step" data-step="5">
     <div class="card">
-        <h3>&#128221; Justification &amp; Output</h3>
+        <h3><span class="accent" style="background:#f97316;"></span> &#128221; Justification &amp; Output</h3>
         <div class="form-group">
             <label>Why is this course necessary for your homeschool?</label>
             <textarea id="homeschoolJust" placeholder="Executive Function: Managing a physical library requires planning, categorization, and maintenance..." style="min-height:70px;"></textarea>
@@ -333,22 +348,19 @@ Objective 3" style="min-height:80px;"></textarea>
     </div>
 </div>
 
-<!-- Pro upsell -->
-<div class="divider" style="height:1px; background:rgba(255,255,255,0.06); margin:1.5rem 0;"></div>
-<div class="pro-section" id="proSection">
-    <p style="font-weight:600; color:#a855f7; margin-bottom:4px;">&#9733; ESA Curriculum Pro</p>
-    <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:10px;">Unlock AI generation — scope, objectives, lesson plans, and receipt scanning in seconds.</p>
-    <div id="proStatus">
-        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:10px;">$4.99/year &middot; 7-day free trial</p>
-        <a href="https://gumroad.com/l/esa-curriculum-pro" target="_blank" class="btn btn-pro" style="display:inline-block; text-decoration:none; padding:10px 20px; font-size:0.85rem;">&#9733; Buy Pro — $4.99/year</a>
-        <p style="font-size:0.8rem; color:#6b6b83; margin-top:10px;">After purchase, paste your license key:</p>
-        <div style="display:flex; gap:8px; margin-top:6px;">
-            <input type="text" id="licenseKey" placeholder="License key" style="font-family:monospace; font-size:0.85rem;">
-            <button class="btn btn-pro" onclick="activateLicense()" style="width:auto; padding:10px 20px; font-size:0.85rem;">Activate</button>
+<!-- Pro badge -->
+<div style="text-align:center; margin:1.5rem 0;">
+    <div id="proSection" style="display:inline-block;">
+        <div id="proStatus">
+            <a href="https://gumroad.com/l/esa-curriculum-pro" target="_blank" style="color:#6b6b83; font-size:0.8rem; text-decoration:none; border:1px solid rgba(168,85,247,0.15); border-radius:6px; padding:4px 12px; display:inline-block;" onclick="event.preventDefault(); document.getElementById('licenseRow').style.display='flex'; return false;">&#9733; Pro — $4.99/yr</a>
+            <div id="licenseRow" style="display:none; margin-top:8px; gap:6px; justify-content:center; align-items:center; flex-wrap:wrap;">
+                <input type="text" id="licenseKey" placeholder="License key" style="width:200px; font-family:monospace; font-size:0.82rem; padding:8px 12px; display:inline-block;">
+                <button class="btn btn-pro" onclick="activateLicense()" style="width:auto; padding:8px 16px; font-size:0.82rem; display:inline-block;">Activate</button>
+            </div>
         </div>
-    </div>
-    <div id="proActive" style="display:none;">
-        <p style="color:#22c55e; font-weight:600;">&#9989; Pro Active</p>
+        <div id="proActive" style="display:none;">
+            <span style="color:#22c55e; font-size:0.8rem; border:1px solid rgba(34,197,94,0.15); border-radius:6px; padding:4px 12px;">&#9989; Pro Active</span>
+        </div>
     </div>
 </div>
 
@@ -363,27 +375,41 @@ let proEnabled = false;
 let items = [];
 
 // --- Step navigation ---
-const totalSteps = 6;
+const totalSteps = 5;
+const stepLabels = ['Student', 'Scope', 'Materials', 'Lessons', 'Justify'];
 (function() {
     const dots = document.getElementById('stepDots');
     for (let i = 1; i <= totalSteps; i++) {
+        const item = document.createElement('div');
+        item.className = 'step-item' + (i === 1 ? ' active' : '');
+        item.id = 'stepItem' + i;
         const d = document.createElement('div');
         d.className = 'step-dot' + (i === 1 ? ' active' : '');
         d.id = 'dot' + i;
-        dots.appendChild(d);
+        const lbl = document.createElement('div');
+        lbl.className = 'step-label';
+        lbl.textContent = stepLabels[i - 1];
+        item.appendChild(d);
+        item.appendChild(lbl);
+        dots.appendChild(item);
     }
 })();
 
 function goToStep(n) {
     document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
     document.querySelector('.step[data-step="' + n + '"]').classList.add('active');
+    document.querySelectorAll('.step-item').forEach((item, i) => {
+        item.className = 'step-item';
+        if (i + 1 < n) item.classList.add('done');
+        else if (i + 1 === n) item.classList.add('active');
+    });
     document.querySelectorAll('.step-dot').forEach((d, i) => {
         d.className = 'step-dot';
         if (i + 1 < n) d.classList.add('done');
         else if (i + 1 === n) d.classList.add('active');
     });
-    const titles = ['Receipt', 'Student & Course', 'Scope & Objectives', 'Materials', 'Lesson Plan', 'Justification & Output'];
-    document.getElementById('stepTitle').textContent = 'Step ' + n + ' of 6 — ' + titles[n - 1];
+    const titles = ['Student & Course', 'Scope & Objectives', 'Materials & Justification', 'Lesson Plan', 'Justification & Output'];
+    document.getElementById('stepTitle').textContent = 'Step ' + n + ' of ' + totalSteps + ' — ' + titles[n - 1];
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -393,6 +419,159 @@ function nextStep() {
 }
 function prevStep() { const cur = parseInt(document.querySelector('.step.active').dataset.step); if (cur > 1) goToStep(cur - 1); }
 function skipStep() { goToStep(2); }
+
+// --- Receipt toggle ---
+function toggleReceipt() {
+    var s = document.getElementById('receiptSection');
+    var open = s.style.display !== 'none';
+    s.style.display = open ? 'none' : 'block';
+    document.getElementById('receiptArrow').textContent = open ? '\u25BC' : '\u25B2';
+    document.getElementById('receiptToggleLabel').textContent = open ? 'Attach a receipt (optional)' : 'Hide receipt';
+}
+
+function scanReceiptOnly() {
+    // Just scan the receipt, don't advance steps
+    var file = document.getElementById('receiptUpload').files[0];
+    var text = document.getElementById('receiptText').value.trim();
+    if (file && proEnabled) {
+        var apiKey = localStorage.getItem('esa_gemini_key');
+        if (!apiKey) {
+            apiKey = prompt('Enter your Gemini API key:');
+            if (!apiKey) return;
+            localStorage.setItem('esa_gemini_key', apiKey);
+        }
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var b64 = e.target.result.split(',')[1];
+            fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + apiKey, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [
+                    { text: 'Extract vendor, total, and items from this receipt. Return ONLY JSON: {"vendor":"","total":"","items":[]}' },
+                    { inline_data: { mime_type: file.type, data: b64 } }
+                ]}]})
+            }).then(function(r) { return r.json(); }).then(function(d) {
+                var raw = d?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                try { var j = JSON.parse(raw.replace(/^```.*\n?|```\s*$/g, '')); fillFromReceipt(j); } catch(e) {}
+                var r = document.getElementById('receiptResult');
+                r.style.display = 'block';
+            }).catch(function() {});
+        };
+        reader.readAsDataURL(file);
+    } else if (text) {
+        var lines = text.split('\n').filter(function(l) { return l.trim(); });
+        var v = lines[0]?.replace(/^\d+\/\d+\/\d+/, '').trim() || '';
+        var totMatch = text.match(/[Tt]otal\s*\$?([0-9,]+\.[0-9]{2})/);
+        var tot = totMatch ? totMatch[1] : '';
+        fillFromReceipt({ vendor: v, total: tot, items: [] });
+        var r = document.getElementById('receiptResult');
+        r.style.display = 'block';
+        document.getElementById('receiptDetails').innerHTML = (v ? 'Vendor: ' + v : '') + (tot ? '<br>Total: $' + tot : '');
+    }
+}
+
+// --- Draft save/resume ---
+var saveTimer = null;
+function saveDraft() {
+    var data = {
+        step: parseInt(document.querySelector('.step.active').dataset.step),
+        studentName: document.getElementById('studentName').value,
+        studentId: document.getElementById('studentId').value,
+        courseTitle: document.getElementById('courseTitle').value,
+        subject: document.getElementById('subject').value,
+        grade: document.getElementById('grade').value,
+        duration: document.getElementById('duration').value,
+        scopeOfStudy: document.getElementById('scopeOfStudy').value,
+        objectives: document.getElementById('objectives').value,
+        receiptText: document.getElementById('receiptText').value,
+        homeschoolJust: document.getElementById('homeschoolJust').value,
+        resourceLinks: document.getElementById('resourceLinks').value,
+        aiLessonPlan: document.getElementById('aiLessonPlan').value,
+        materials: [],
+        units: []
+    };
+    for (var i = 0; i < matCount; i++) {
+        var el = document.getElementById('mat' + i);
+        if (el && el.value.trim()) {
+            data.materials.push({
+                name: el.value,
+                price: (document.getElementById('matPrice' + i) || {}).value || '',
+                why: (document.getElementById('matWhy' + i) || {}).value || ''
+            });
+        }
+    }
+    document.querySelectorAll('.unit-row').forEach(function(row) {
+        data.units.push({
+            title: (row.querySelector('.unit-title') || {}).value || '',
+            weeks: (row.querySelector('.unit-weeks') || {}).value || '',
+            goal: (row.querySelector('.unit-goal') || {}).value || '',
+            activities: (row.querySelector('.unit-activities') || {}).value || ''
+        });
+    });
+    localStorage.setItem('esa_draft', JSON.stringify(data));
+    var st = document.getElementById('draftStatus');
+    if (st) { st.style.opacity = 1; clearTimeout(st._t); st._t = setTimeout(function() { st.style.opacity = 0; }, 2500); }
+}
+
+function restoreDraft() {
+    var raw = localStorage.getItem('esa_draft');
+    if (!raw) return;
+    try {
+        var data = JSON.parse(raw);
+        if (!data.studentName && !data.scopeOfStudy) return; // empty draft
+        var fields = { studentName:1, studentId:1, courseTitle:1, subject:1, grade:1, duration:1,
+            scopeOfStudy:1, objectives:1, receiptText:1, homeschoolJust:1, resourceLinks:1, aiLessonPlan:1 };
+        for (var k in fields) {
+            if (data[k]) {
+                var el = document.getElementById(k);
+                if (el) el.value = data[k];
+            }
+        }
+        // Restore materials
+        if (data.materials && data.materials.length) {
+            for (var i = 0; i < data.materials.length; i++) {
+                if (i > 0) addMaterial();
+                var m = data.materials[i];
+                var el = document.getElementById('mat' + i);
+                if (el && m.name) el.value = m.name;
+                var pr = document.getElementById('matPrice' + i);
+                if (pr && m.price) pr.value = m.price;
+                var wh = document.getElementById('matWhy' + i);
+                if (wh && m.why) wh.value = m.why;
+            }
+        }
+        // Restore units
+        if (data.units && data.units.length) {
+            for (var i = 0; i < data.units.length; i++) {
+                if (i > 0) addUnit();
+                var rows = document.querySelectorAll('.unit-row');
+                var row = rows[rows.length - 1];
+                if (!row) continue;
+                var u = data.units[i];
+                var t = row.querySelector('.unit-title');
+                if (t && u.title) t.value = u.title;
+                var w = row.querySelector('.unit-weeks');
+                if (w && u.weeks) w.value = u.weeks;
+                var g = row.querySelector('.unit-goal');
+                if (g && u.goal) g.value = u.goal;
+                var a = row.querySelector('.unit-activities');
+                if (a && u.activities) a.value = u.activities;
+            }
+        }
+        if (data.step && data.step > 1 && data.step <= totalSteps) goToStep(data.step);
+        var st = document.getElementById('draftStatus');
+        if (st) { st.textContent = 'Draft restored'; st.style.opacity = 1; setTimeout(function() { st.style.opacity = 0; }, 3000); }
+    } catch(e) {}
+}
+
+// Auto-save on any input change
+document.addEventListener('input', function() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveDraft, 400);
+});
+
+// Restore draft on load
+restoreDraft();
 
 // --- Pro license ---
 (function() {
@@ -700,22 +879,19 @@ function toggleHelp() {
 function updateHelpTips() {
     var cur = parseInt(document.querySelector('.step.active').dataset.step);
     var tips = {
-        1: ['You can skip this step — receipts are optional.',
-            'Snap a photo of your receipt and we scan it automatically (Pro).',
-            'Paste receipt text for a quick manual scan (Free).'],
-        2: ['The student name and application ID are required by AZ DOE.',
-            'Course title should be descriptive (e.g., \"Sustainable Chemistry\").',
-            'Don\'t worry about your ESA ID — it\'s on your account dashboard.'],
-        3: ['Be specific about what the course covers. AI can help!',
-            'Learning objectives should be measurable (e.g., \"Student will identify...\").',
+        1: ['Start with student name and course title — these are required by AZ DOE.',
+            'Course title should be descriptive (e.g., "Sustainable Chemistry").',
+            'Optional: expand "Attach a receipt" below to scan purchases into your materials list.'],
+        2: ['Be specific about what the course covers. AI can help!',
+            'Learning objectives should be measurable (e.g., "Student will identify...").',
             'Save time: hit the purple "Generate with AI" button.'],
-        4: ['List every item and explain WHY it\'s educationally necessary.',
+        3: ['List every item and explain WHY it\'s educationally necessary.',
             'The state wants to see the educational link, not just the item name.',
             'Example: "Beeswax pellets — used for thermal transformation lab."'],
-        5: ['Break your course into 3 logical units.',
+        4: ['Break your course into 3 logical units.',
             'Each unit should have a clear goal or deliverable.',
             'Weeks can overlap — just show the progression.'],
-        6: ['Explain why this course matters for YOUR homeschool.',
+        5: ['Explain why this course matters for YOUR homeschool.',
             'This is your chance to connect everything together.',
             'The compiled PPC will reference A.R.S. §15-2402 automatically.']
     };
