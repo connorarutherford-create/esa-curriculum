@@ -117,6 +117,26 @@
 <h1>ESA Curriculum Builder</h1>
 <p class="sub" id="stepTitle">Step 1 of 6 — Receipt</p>
 
+<div style="background:rgba(59,130,246,0.04); border:1px solid rgba(59,130,246,0.08); border-radius:10px; padding:12px 16px; margin-bottom:1rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+    <span style="font-size:0.85rem; color:#94a3b8;">We'll guide you through each step. Your PPC will be ready in minutes.</span>
+    <span style="font-size:0.75rem; color:#5a5a72; border:1px solid rgba(255,255,255,0.06); border-radius:4px; padding:2px 8px; white-space:nowrap;">AZ ESA compliant</span>
+</div>
+
+<div id="helpToggle" style="text-align:right; margin-bottom:0.8rem;">
+    <button onclick="toggleHelp()" style="background:none; border:none; color:#6b6b83; font-size:0.8rem; cursor:pointer; padding:4px 8px; border-radius:6px;">&#10068; Need help?</button>
+</div>
+
+<div id="helpPanel" style="display:none; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:16px 20px; margin-bottom:1rem;">
+    <div id="helpContent">
+        <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:8px;"><strong style="color:#b4b4cc;">Quick Tips</strong></p>
+        <ul id="helpTips" style="font-size:0.82rem; color:#6b6b83; padding-left:16px; margin-bottom:8px;">
+            <li>You don't need a receipt to start — skip Step 1 if you don't have one.</li>
+            <li>All fields save automatically as you type (nothing lost if you step away).</li>
+            <li>Need a real example? <a href="#" onclick="return showExample()" style="color:#3b82f6;">View a sample PPC</a>.</li>
+        </ul>
+    </div>
+</div>
+
 <div class="step-indicator" id="stepDots"></div>
 
 <!-- Step 1: Receipt -->
@@ -667,6 +687,53 @@ function printPPC() {
 function startOver() {
     if (!confirm('Clear everything and start over?')) return;
     location.reload();
+}
+
+// --- Help & empathy ---
+var helpOpen = false;
+function toggleHelp() {
+    helpOpen = !helpOpen;
+    document.getElementById('helpPanel').style.display = helpOpen ? 'block' : 'none';
+    updateHelpTips();
+}
+
+function updateHelpTips() {
+    var cur = parseInt(document.querySelector('.step.active').dataset.step);
+    var tips = {
+        1: ['You can skip this step — receipts are optional.',
+            'Snap a photo of your receipt and we scan it automatically (Pro).',
+            'Paste receipt text for a quick manual scan (Free).'],
+        2: ['The student name and application ID are required by AZ DOE.',
+            'Course title should be descriptive (e.g., \"Sustainable Chemistry\").',
+            'Don\'t worry about your ESA ID — it\'s on your account dashboard.'],
+        3: ['Be specific about what the course covers. AI can help!',
+            'Learning objectives should be measurable (e.g., \"Student will identify...\").',
+            'Save time: hit the purple "Generate with AI" button.'],
+        4: ['List every item and explain WHY it\'s educationally necessary.',
+            'The state wants to see the educational link, not just the item name.',
+            'Example: "Beeswax pellets — used for thermal transformation lab."'],
+        5: ['Break your course into 3 logical units.',
+            'Each unit should have a clear goal or deliverable.',
+            'Weeks can overlap — just show the progression.'],
+        6: ['Explain why this course matters for YOUR homeschool.',
+            'This is your chance to connect everything together.',
+            'The compiled PPC will reference A.R.S. §15-2402 automatically.']
+    };
+    var list = document.getElementById('helpTips');
+    var t = tips[cur] || tips[1];
+    list.innerHTML = t.map(function(tip) { return '<li>' + tip + '</li>'; }).join('');
+}
+
+function showExample() {
+    document.getElementById('helpPanel').style.display = 'block';
+    helpOpen = true;
+    var tipsEl = document.getElementById('helpTips');
+    tipsEl.innerHTML = '<li><strong>Sample PPC: Environmental Sustainability (6 weeks)</strong></li>' +
+        '<li>Scope: This unit explores the science of sustainable food preservation...</li>' +
+        '<li>Objectives: • Human Impact on Earth Systems • Properties of Matter</li>' +
+        '<li>Materials: Beeswax pellets ($14.99) — thermal transformation lab</li>' +
+        '<li>Lessons: Week 1 — The Plastic Crisis, Week 2 — Chemistry of Preservatives</li>';
+    return false;
 }
 </script>
 </body>
