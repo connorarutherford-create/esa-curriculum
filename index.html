@@ -47,6 +47,10 @@
         .step { display: none; }
         .step.active { display: block; }
 
+        .chat-msg p { margin: 0; }
+
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
         .card {
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.05);
@@ -113,7 +117,7 @@
 <div class="container">
 
 <h1>ESA Curriculum Builder</h1>
-<p class="sub" id="stepTitle">Step 1 of 5 — Student & Course</p>
+<p class="sub" id="stepTitle">AI-Powered PPC Builder</p>
 
 <div style="background:rgba(59,130,246,0.03); border:1px solid rgba(59,130,246,0.06); border-radius:8px; padding:10px 14px; margin-bottom:0.8rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center;">
     <span style="font-size:0.85rem; color:#94a3b8; text-align:center;">We'll guide you through each step. Your PPC will be ready in minutes.</span>
@@ -126,203 +130,53 @@
     <div id="helpContent">
         <p style="font-size:0.85rem; color:#8b8ba3; margin-bottom:8px;"><strong style="color:#b4b4cc;">Quick Tips</strong></p>
         <ul id="helpTips" style="font-size:0.82rem; color:#6b6b83; padding-left:16px; margin-bottom:8px;">
-            <li>Start with your student's name and course — that's all you need.</li>
-            <li>All fields save automatically as you type (nothing lost if you step away).</li>
+            <li>Tell the AI your student's name, subject, and grade to start.</li>
+            <li>Your conversation saves automatically — come back anytime.</li>
             <li>Need a real example? <a href="#" onclick="return showExample()" style="color:#3b82f6;">View a sample PPC</a>.</li>
         </ul>
     </div>
 </div>
 
-<div class="step-indicator" id="stepDots"></div>
-
-<!-- Step 1: Student & Course + Receipt (optional) -->
-<div class="step active" data-step="1">
-    <div class="card">
-        <h3><span class="accent" style="background:#3b82f6;"></span> &#128218; Student &amp; Course</h3>
-        <div class="row">
-            <div class="form-group">
-                <label>Student name</label>
-                <input type="text" id="studentName" placeholder="First and last name">
-            </div>
-            <div class="form-group">
-                <label>ESA application ID#</label>
-                <input type="text" id="studentId" placeholder="From your account">
+<!-- Chat Interface -->
+<div id="chatContainer">
+    <div id="chatMessages" style="display:flex; flex-direction:column; gap:12px; margin-bottom:1rem; max-height:60vh; overflow-y:auto; padding:4px;">
+        <div class="chat-msg ai">
+            <div style="background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.08); border-radius:12px 12px 12px 4px; padding:14px 16px; max-width:85%;">
+                <p style="font-size:0.88rem; color:#c4c4d4; line-height:1.6;">Hi! I'm your PPC assistant. I'll help you build a Parent-Provided Curriculum for Arizona ESA.</p>
+                <p style="font-size:0.88rem; color:#c4c4d4; line-height:1.6; margin-top:8px;">To start, tell me: <strong>what's your student's name and what subject are you planning?</strong></p>
             </div>
         </div>
-        <div class="form-group">
-            <label>Course title</label>
-            <input type="text" id="courseTitle" placeholder="e.g., Sustainable Chemistry &amp; Environmental Stewardship">
+    </div>
+    <div id="typingIndicator" style="display:none; margin-bottom:0.8rem;">
+        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:12px; padding:12px 16px; display:inline-block;">
+            <span style="color:#5a5a72; font-size:0.85rem;">Thinking</span>
+            <span class="dot-pulse" style="display:inline-flex; gap:3px; margin-left:6px;">
+                <span style="width:4px; height:4px; border-radius:50%; background:#5a5a72; animation:pulse 1.2s infinite;"></span>
+                <span style="width:4px; height:4px; border-radius:50%; background:#5a5a72; animation:pulse 1.2s 0.2s infinite;"></span>
+                <span style="width:4px; height:4px; border-radius:50%; background:#5a5a72; animation:pulse 1.2s 0.4s infinite;"></span>
+            </span>
         </div>
-        <div class="row">
-            <div class="form-group">
-                <label>Subject</label>
-                <select id="subject">
-                    <option value="">Select...</option>
-                    <option>Reading</option><option>Grammar</option><option>Mathematics</option>
-                    <option>Science</option><option>Environmental Science</option><option>Social Studies</option>
-                    <option>Art</option><option>Music</option><option>Physical Education</option>
-                    <option>Foreign Language</option><option>Library Science</option><option>Life Skills</option>
-                    <option>Other</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Grade</label>
-                <select id="grade">
-                    <option value="">Select...</option>
-                    <option>PK</option><option>K</option>
-                    <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-                    <option>6</option><option>7</option><option>8</option><option>9</option>
-                    <option>10</option><option>11</option><option>12</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Duration</label>
-                <select id="duration">
-                    <option value="">Select...</option>
-                    <option>4 Weeks</option><option>6 Weeks</option><option>8 Weeks</option>
-                    <option>12 Weeks</option><option>Semester</option><option>Full Year</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Collapsible receipt section -->
-        <div style="margin-top:1.2rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.06);">
-            <button onclick="toggleReceipt()" type="button" style="background:none; border:none; color:#6b6b83; font-size:0.85rem; cursor:pointer; padding:6px 0; width:100%; text-align:left;">
-                &#128247; <span id="receiptToggleLabel">Attach a receipt (optional)</span> <span id="receiptArrow" style="float:right;">&#9660;</span>
-            </button>
-            <div id="receiptSection" style="display:none; margin-top:12px;">
-                <p style="font-size:0.82rem; color:#6b6b83; margin-bottom:0.8rem;">Upload a photo or paste text. We'll extract vendor and items to fill your materials list.</p>
-                <input type="file" id="receiptUpload" accept="image/*" capture="environment" onchange="handleFilePick(this)" style="display:none;">
-                <div class="upload-area" onclick="document.getElementById('receiptUpload').click()" style="cursor:pointer; background:#0d0d18; border:1.5px dashed rgba(255,255,255,0.12); border-radius:12px; padding:24px; text-align:center; transition:border-color 0.2s, background 0.2s;" onmouseover="this.style.borderColor='rgba(59,130,246,0.3)'; this.style.background='rgba(59,130,246,0.03)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.background='#0d0d18';">
-                    <div style="font-size:1.5rem; margin-bottom:6px; opacity:0.5;">&#128247;</div>
-                    <div style="font-size:0.85rem; font-weight:500; color:#b4b4cc;" id="fileLabel">Choose a receipt photo</div>
-                </div>
-                <div style="display:flex; align-items:center; gap:12px; margin:0.8rem 0;">
-                    <div style="flex:1; height:1px; background:rgba(255,255,255,0.06);"></div>
-                    <span style="font-size:0.75rem; color:#5a5a72; text-transform:uppercase; letter-spacing:0.05em;">or</span>
-                    <div style="flex:1; height:1px; background:rgba(255,255,255,0.06);"></div>
-                </div>
-                <textarea id="receiptText" placeholder="Paste receipt text here..." style="min-height:60px; font-size:0.88rem;"></textarea>
-                <button class="btn btn-ghost" onclick="scanReceiptOnly()" style="width:100%; padding:10px; margin-top:8px; font-size:0.85rem;">Scan Receipt</button>
-                <div id="receiptResult" style="display:none; margin-top:10px; padding:12px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.15); border-radius:10px;">
-                    <p style="color:#22c55e; font-weight:600; margin-bottom:4px; font-size:0.88rem;">&#9989; Receipt scanned</p>
-                    <div id="receiptDetails" style="font-size:0.82rem; color:#8b8ba3;"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="btn-row">
-            <button class="btn btn-primary" onclick="nextStep()">Add Scope →</button>
-        </div>
+    </div>
+    <div id="chatInput" style="display:flex; gap:8px; margin-top:0.5rem;">
+        <textarea id="chatInputField" placeholder="Type your response..." style="flex:1; min-height:48px; max-height:120px; font-size:0.9rem; resize:none;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMessage();}"></textarea>
+        <button onclick="sendChatMessage()" class="btn btn-primary" style="flex:0 0 auto; padding:12px 20px; align-self:flex-end;">Send</button>
+    </div>
+    <div id="compileBar" style="display:none; margin-top:1rem; padding:14px; background:rgba(168,85,247,0.04); border:1px solid rgba(168,85,247,0.12); border-radius:10px; text-align:center;">
+        <p style="font-size:0.88rem; color:#8b8ba3; margin-bottom:8px;">Ready to compile your PPC?</p>
+        <button onclick="compilePPC()" class="btn btn-success" style="padding:10px 24px; font-size:0.9rem;">⚡ Compile PPC</button>
+        <button onclick="newConversation()" class="btn btn-ghost" style="padding:10px 20px; font-size:0.85rem; margin-left:8px;">Start Over</button>
     </div>
 </div>
 
-<!-- Step 2: Scope & Objectives -->
-<div class="step" data-step="2">
+<!-- PPC Output (hidden until compiled) -->
+<div id="ppcSection" style="display:none;">
     <div class="card">
-        <h3><span class="accent" style="background:#8b5cf6;"></span> &#128214; Scope &amp; Objectives</h3>
-        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1rem;">Describe what this course covers. Pro users can generate this with AI.</p>
-        <div class="pro-section">
-            <p style="font-size:0.85rem; color:#a855f7; font-weight:600; margin-bottom:4px;">&#9733; Pro Feature</p>
-            <p style="font-size:0.82rem; color:#8b8ba3; margin-bottom:8px;">Generate scope, objectives, and lesson plans with one click.</p>
-            <button class="btn btn-pro" onclick="generateWithAI()" id="aiBtn" style="width:auto; padding:10px 20px; font-size:0.85rem;">&#9889; Generate with AI</button>
-        </div>
-        <div class="form-group">
-            <label>Scope of study</label>
-            <textarea id="scopeOfStudy" placeholder="Describe what this course covers..." style="min-height:80px;"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Learning objectives (one per line)</label>
-            <textarea id="objectives" placeholder="Objective 1
-Objective 2
-Objective 3" style="min-height:80px;"></textarea>
-        </div>
-        <div class="btn-row">
-            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
-            <button class="btn btn-primary" onclick="nextStep()">Add Materials →</button>
-        </div>
-    </div>
-</div>
-
-<!-- Step 3: Materials -->
-<div class="step" data-step="3">
-    <div class="card">
-        <h3><span class="accent" style="background:#22c55e;"></span> &#128230; Materials &amp; Justification</h3>
-        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1rem;">List each item and explain why it's needed for this course.</p>
-        <div id="materialsList">
-            <div class="file-row">
-                <input type="text" id="mat0" placeholder="Item name">
-                <input type="text" id="matPrice0" placeholder="Price" style="width:90px;">
-                <textarea id="matWhy0" placeholder="Why is this educationally necessary?" style="min-height:44px;"></textarea>
-            </div>
-        </div>
-        <button class="btn btn-ghost" onclick="addMaterial()" style="width:100%; padding:10px; margin-top:8px;">+ Add item</button>
+        <h3><span class="accent" style="background:#f97316;"></span> &#128221; Your PPC</h3>
+        <div class="output-box" id="ppcOutput" style="white-space:pre-wrap; font-family:Georgia,serif; font-size:0.88rem; line-height:1.7;"></div>
         <div class="btn-row" style="margin-top:1rem;">
-            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
-            <button class="btn btn-primary" onclick="nextStep()">Plan Lessons →</button>
-        </div>
-    </div>
-</div>
-
-<!-- Step 4: Lesson Plan -->
-<div class="step" data-step="4">
-    <div class="card">
-        <h3><span class="accent" style="background:#f59e0b;"></span> &#128195; Lesson Plan</h3>
-        <p style="font-size:0.85rem; color:#6b6b83; margin-bottom:1rem;">Describe what you'll cover each unit.</p>
-        <div id="unitsList">
-            <div class="unit-row">
-                <div class="form-group">
-                    <label>Unit 1 title</label>
-                    <input type="text" class="unit-title" placeholder="e.g., The Plastic Crisis">
-                </div>
-                <div class="row">
-                    <div class="form-group" style="flex:0.4;">
-                        <label>Weeks</label>
-                        <input type="text" class="unit-weeks" placeholder="e.g., 1-3">
-                    </div>
-                    <div class="form-group">
-                        <label>Goal / task</label>
-                        <input type="text" class="unit-goal" placeholder="e.g., Create shelf labels">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Activities</label>
-                    <textarea class="unit-activities" placeholder="Describe the activities for this unit." style="min-height:60px;"></textarea>
-                </div>
-            </div>
-        </div>
-        <textarea id="aiLessonPlan" style="display:none;"></textarea>
-        <button class="btn btn-ghost" onclick="addUnit()" style="width:100%; padding:10px; margin-top:8px;">+ Add unit</button>
-        <div class="btn-row" style="margin-top:1rem;">
-            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
-            <button class="btn btn-primary" onclick="nextStep()">Review & Justify →</button>
-        </div>
-    </div>
-</div>
-
-<!-- Step 5: Justification & Output -->
-<div class="step" data-step="5">
-    <div class="card">
-        <h3><span class="accent" style="background:#f97316;"></span> &#128221; Justification &amp; Output</h3>
-        <div class="form-group">
-            <label>Why is this course necessary for your homeschool?</label>
-            <textarea id="homeschoolJust" placeholder="Executive Function: Managing a physical library requires planning, categorization, and maintenance..." style="min-height:70px;"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Resources / links (optional)</label>
-            <input type="text" id="resourceLinks" placeholder="https://...">
-        </div>
-        <div class="btn-row">
-            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
-            <button class="btn btn-success" onclick="compilePPC()">&#9889; Compile PPC</button>
-        </div>
-        <div id="outputBox" style="display:none;">
-            <div class="output-box" id="ppcOutput"></div>
-            <div class="btn-row">
-                <button class="btn btn-ghost" onclick="copyPPC()">&#128203; Copy</button>
-                <button class="btn btn-ghost" onclick="printPPC()">&#128424; Print</button>
-                <button class="btn btn-ghost" onclick="startOver()">&#8635; New</button>
-            </div>
+            <button class="btn btn-ghost" onclick="copyPPC()">&#128203; Copy</button>
+            <button class="btn btn-ghost" onclick="printPPC()">&#128424; Print</button>
+            <button class="btn btn-ghost" onclick="newConversation()">&#8635; New</button>
         </div>
     </div>
 </div>
@@ -348,209 +202,150 @@ Objective 3" style="min-height:80px;"></textarea>
 </div>
 
 <script>
-let matCount = 1;
-let unitCount = 1;
-let proEnabled = false;
-let items = [];
+var proEnabled = false;
 
-// --- Step navigation ---
-const totalSteps = 5;
-const stepLabels = ['Student', 'Scope', 'Materials', 'Lessons', 'Justify'];
-(function() {
-    const dots = document.getElementById('stepDots');
-    for (let i = 1; i <= totalSteps; i++) {
-        const item = document.createElement('div');
-        item.className = 'step-item' + (i === 1 ? ' active' : '');
-        item.id = 'stepItem' + i;
-        const d = document.createElement('div');
-        d.className = 'step-dot' + (i === 1 ? ' active' : '');
-        d.id = 'dot' + i;
-        const lbl = document.createElement('div');
-        lbl.className = 'step-label';
-        lbl.textContent = stepLabels[i - 1];
-        item.appendChild(d);
-        item.appendChild(lbl);
-        dots.appendChild(item);
-    }
-})();
+// --- Chat PPC Builder ---
+const WORKER_URL = 'https://esa-curriculum-ai.YOUR-SUBDOMAIN.workers.dev';
+var chatConversation = [];
 
-function goToStep(n) {
-    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-    document.querySelector('.step[data-step="' + n + '"]').classList.add('active');
-    document.querySelectorAll('.step-item').forEach((item, i) => {
-        item.className = 'step-item';
-        if (i + 1 < n) item.classList.add('done');
-        else if (i + 1 === n) item.classList.add('active');
-    });
-    document.querySelectorAll('.step-dot').forEach((d, i) => {
-        d.className = 'step-dot';
-        if (i + 1 < n) d.classList.add('done');
-        else if (i + 1 === n) d.classList.add('active');
-    });
-    const titles = ['Student & Course', 'Scope & Objectives', 'Materials & Justification', 'Lesson Plan', 'Justification & Output'];
-    document.getElementById('stepTitle').textContent = 'Step ' + n + ' of ' + totalSteps + ' — ' + titles[n - 1];
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function nextStep() {
-    const cur = parseInt(document.querySelector('.step.active').dataset.step);
-    if (cur < totalSteps) goToStep(cur + 1);
-}
-function prevStep() { const cur = parseInt(document.querySelector('.step.active').dataset.step); if (cur > 1) goToStep(cur - 1); }
-function skipStep() { goToStep(2); }
-
-// --- Receipt toggle ---
-function toggleReceipt() {
-    var s = document.getElementById('receiptSection');
-    var open = s.style.display !== 'none';
-    s.style.display = open ? 'none' : 'block';
-    document.getElementById('receiptArrow').textContent = open ? '\u25BC' : '\u25B2';
-    document.getElementById('receiptToggleLabel').textContent = open ? 'Attach a receipt (optional)' : 'Hide receipt';
-}
-
-function scanReceiptOnly() {
-    // Just scan the receipt, don't advance steps
-    var file = document.getElementById('receiptUpload').files[0];
-    var text = document.getElementById('receiptText').value.trim();
-    if (file && proEnabled) {
-        var apiKey = localStorage.getItem('esa_gemini_key');
-        if (!apiKey) {
-            apiKey = prompt('Enter your Gemini API key:');
-            if (!apiKey) return;
-            localStorage.setItem('esa_gemini_key', apiKey);
+function sendChatMessage() {
+    var input = document.getElementById('chatInputField');
+    var text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    
+    addChatMessage('user', text);
+    chatConversation.push({ role: 'user', content: text });
+    
+    showTyping(true);
+    
+    var lic = localStorage.getItem('esa_pro_license') || '';
+    
+    fetch(WORKER_URL + '/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: chatConversation, license_key: lic })
+    }).then(function(r) {
+        if (!r.ok) {
+            showTyping(false);
+            addChatMessage('ai', 'Sorry, I had trouble reaching the AI. Check your license key is active and try again.');
+            return null;
         }
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var b64 = e.target.result.split(',')[1];
-            fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + apiKey, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [
-                    { text: 'Extract vendor, total, and items from this receipt. Return ONLY JSON: {"vendor":"","total":"","items":[]}' },
-                    { inline_data: { mime_type: file.type, data: b64 } }
-                ]}]})
-            }).then(function(r) { return r.json(); }).then(function(d) {
-                var raw = d?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-                try { var j = JSON.parse(raw.replace(/^```.*\n?|```\s*$/g, '')); fillFromReceipt(j); } catch(e) {}
-                var r = document.getElementById('receiptResult');
-                r.style.display = 'block';
-            }).catch(function() {});
-        };
-        reader.readAsDataURL(file);
-    } else if (text) {
-        var lines = text.split('\n').filter(function(l) { return l.trim(); });
-        var v = lines[0]?.replace(/^\d+\/\d+\/\d+/, '').trim() || '';
-        var totMatch = text.match(/[Tt]otal\s*\$?([0-9,]+\.[0-9]{2})/);
-        var tot = totMatch ? totMatch[1] : '';
-        fillFromReceipt({ vendor: v, total: tot, items: [] });
-        var r = document.getElementById('receiptResult');
-        r.style.display = 'block';
-        document.getElementById('receiptDetails').innerHTML = (v ? 'Vendor: ' + v : '') + (tot ? '<br>Total: $' + tot : '');
-    }
+        return r.json();
+    }).then(function(data) {
+        showTyping(false);
+        if (!data) return;
+        var reply = data.response || data.choices?.[0]?.message?.content || '';
+        if (!reply) reply = 'I received your message. Can you tell me more about what you need for your curriculum?';
+        addChatMessage('ai', reply);
+        chatConversation.push({ role: 'assistant', content: reply });
+        
+        // Show compile bar if AI suggests it
+        if (reply.toLowerCase().includes('compile')) {
+            document.getElementById('compileBar').style.display = 'block';
+        }
+        
+        saveChatDraft();
+    }).catch(function(err) {
+        showTyping(false);
+        addChatMessage('ai', 'Connection error. Please check that the Worker is deployed and try again.');
+        console.log('Chat error:', err);
+    });
 }
 
-// --- Draft save/resume ---
-var saveTimer = null;
-function saveDraft() {
-    var data = {
-        step: parseInt(document.querySelector('.step.active').dataset.step),
-        studentName: document.getElementById('studentName').value,
-        studentId: document.getElementById('studentId').value,
-        courseTitle: document.getElementById('courseTitle').value,
-        subject: document.getElementById('subject').value,
-        grade: document.getElementById('grade').value,
-        duration: document.getElementById('duration').value,
-        scopeOfStudy: document.getElementById('scopeOfStudy').value,
-        objectives: document.getElementById('objectives').value,
-        receiptText: document.getElementById('receiptText').value,
-        homeschoolJust: document.getElementById('homeschoolJust').value,
-        resourceLinks: document.getElementById('resourceLinks').value,
-        aiLessonPlan: document.getElementById('aiLessonPlan').value,
-        materials: [],
-        units: []
-    };
-    for (var i = 0; i < matCount; i++) {
-        var el = document.getElementById('mat' + i);
-        if (el && el.value.trim()) {
-            data.materials.push({
-                name: el.value,
-                price: (document.getElementById('matPrice' + i) || {}).value || '',
-                why: (document.getElementById('matWhy' + i) || {}).value || ''
-            });
+function addChatMessage(role, text) {
+    var container = document.getElementById('chatMessages');
+    var div = document.createElement('div');
+    div.className = 'chat-msg ' + role;
+    
+    var align = role === 'user' ? 'flex-end' : 'flex-start';
+    var bg = role === 'user' ? 'rgba(59,130,246,0.12)' : 'rgba(255,255,255,0.03)';
+    var border = role === 'user' ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.05)';
+    var radius = role === 'user' ? '12px 12px 4px 12px' : '12px 12px 12px 4px';
+    
+    div.style.display = 'flex';
+    div.style.justifyContent = align;
+    div.style.marginBottom = '4px';
+    
+    div.innerHTML = '<div style="background:' + bg + '; border:1px solid ' + border + '; border-radius:' + radius + '; padding:12px 16px; max-width:85%;"><p style="font-size:0.88rem; color:#c4c4d4; line-height:1.6; white-space:pre-wrap;">' + escapeHtml(text) + '</p></div>';
+    
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+function showTyping(show) {
+    document.getElementById('typingIndicator').style.display = show ? 'block' : 'none';
+}
+
+function compilePPC() {
+    var btn = document.querySelector('#compileBar .btn-success');
+    btn.textContent = '⏳ Compiling...';
+    btn.disabled = true;
+    
+    var lic = localStorage.getItem('esa_pro_license') || '';
+    
+    fetch(WORKER_URL + '/compile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversation: chatConversation, license_key: lic })
+    }).then(function(r) { return r.json(); }).then(function(data) {
+        btn.textContent = '⚡ Compile PPC';
+        btn.disabled = false;
+        if (data.ppc) {
+            document.getElementById('chatContainer').style.display = 'none';
+            document.getElementById('ppcSection').style.display = 'block';
+            document.getElementById('ppcOutput').textContent = data.ppc;
+        } else {
+            alert('Could not compile PPC: ' + (data.error || 'Unknown error'));
         }
-    }
-    document.querySelectorAll('.unit-row').forEach(function(row) {
-        data.units.push({
-            title: (row.querySelector('.unit-title') || {}).value || '',
-            weeks: (row.querySelector('.unit-weeks') || {}).value || '',
-            goal: (row.querySelector('.unit-goal') || {}).value || '',
-            activities: (row.querySelector('.unit-activities') || {}).value || ''
-        });
+    }).catch(function(err) {
+        btn.textContent = '⚡ Compile PPC';
+        btn.disabled = false;
+        alert('Error contacting the AI service.');
+        console.log('Compile error:', err);
     });
-    localStorage.setItem('esa_draft', JSON.stringify(data));
+}
+
+function newConversation() {
+    chatConversation = [];
+    document.getElementById('chatMessages').innerHTML = '';
+    document.getElementById('compileBar').style.display = 'none';
+    document.getElementById('ppcSection').style.display = 'none';
+    document.getElementById('chatContainer').style.display = 'block';
+    localStorage.removeItem('esa_chat_draft');
+    // Re-add welcome message
+    addChatMessage('ai', "Hi! I'm your PPC assistant. I'll help you build a Parent-Provided Curriculum for Arizona ESA.\n\nTo start, tell me: **what's your student's name and what subject are you planning?**");
+}
+
+function saveChatDraft() {
+    localStorage.setItem('esa_chat_draft', JSON.stringify(chatConversation));
     var st = document.getElementById('draftStatus');
     if (st) { st.style.opacity = 1; clearTimeout(st._t); st._t = setTimeout(function() { st.style.opacity = 0; }, 2500); }
 }
 
-function restoreDraft() {
-    var raw = localStorage.getItem('esa_draft');
-    if (!raw) return;
-    try {
-        var data = JSON.parse(raw);
-        if (!data.studentName && !data.scopeOfStudy) return; // empty draft
-        var fields = { studentName:1, studentId:1, courseTitle:1, subject:1, grade:1, duration:1,
-            scopeOfStudy:1, objectives:1, receiptText:1, homeschoolJust:1, resourceLinks:1, aiLessonPlan:1 };
-        for (var k in fields) {
-            if (data[k]) {
-                var el = document.getElementById(k);
-                if (el) el.value = data[k];
-            }
-        }
-        // Restore materials
-        if (data.materials && data.materials.length) {
-            for (var i = 0; i < data.materials.length; i++) {
-                if (i > 0) addMaterial();
-                var m = data.materials[i];
-                var el = document.getElementById('mat' + i);
-                if (el && m.name) el.value = m.name;
-                var pr = document.getElementById('matPrice' + i);
-                if (pr && m.price) pr.value = m.price;
-                var wh = document.getElementById('matWhy' + i);
-                if (wh && m.why) wh.value = m.why;
-            }
-        }
-        // Restore units
-        if (data.units && data.units.length) {
-            for (var i = 0; i < data.units.length; i++) {
-                if (i > 0) addUnit();
-                var rows = document.querySelectorAll('.unit-row');
-                var row = rows[rows.length - 1];
-                if (!row) continue;
-                var u = data.units[i];
-                var t = row.querySelector('.unit-title');
-                if (t && u.title) t.value = u.title;
-                var w = row.querySelector('.unit-weeks');
-                if (w && u.weeks) w.value = u.weeks;
-                var g = row.querySelector('.unit-goal');
-                if (g && u.goal) g.value = u.goal;
-                var a = row.querySelector('.unit-activities');
-                if (a && u.activities) a.value = u.activities;
-            }
-        }
-        if (data.step && data.step > 1 && data.step <= totalSteps) goToStep(data.step);
-        var st = document.getElementById('draftStatus');
-        if (st) { st.textContent = 'Draft restored'; st.style.opacity = 1; setTimeout(function() { st.style.opacity = 0; }, 3000); }
-    } catch(e) {}
+function escapeHtml(text) {
+    var d = document.createElement('div');
+    d.textContent = text;
+    return d.innerHTML;
 }
 
-// Auto-save on any input change
-document.addEventListener('input', function() {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(saveDraft, 400);
-});
-
-// Restore draft on load
-restoreDraft();
+// Restore chat draft on load
+(function() {
+    var draft = localStorage.getItem('esa_chat_draft');
+    if (draft) {
+        try {
+            chatConversation = JSON.parse(draft);
+            if (chatConversation.length) {
+                chatConversation.forEach(function(msg) {
+                    addChatMessage(msg.role, msg.content);
+                });
+                if (chatConversation.length > 2) {
+                    document.getElementById('compileBar').style.display = 'block';
+                }
+            }
+        } catch(e) {}
+    }
+})();
 
 // --- Pro license ---
 (function() {
@@ -902,11 +697,7 @@ function printPPC() {
     w.document.close(); w.print();
 }
 
-function startOver() {
-    if (!confirm('Clear everything and start over?')) return;
-    localStorage.removeItem('esa_draft');
-    location.reload();
-}
+function startOver() { newConversation(); }
 
 // --- Help & empathy ---
 var helpOpen = false;
@@ -917,27 +708,15 @@ function toggleHelp() {
 }
 
 function updateHelpTips() {
-    var cur = parseInt(document.querySelector('.step.active').dataset.step);
-    var tips = {
-        1: ['Start with student name and course title — these are required by AZ DOE.',
-            'Course title should be descriptive (e.g., "Sustainable Chemistry").',
-            'Optional: expand "Attach a receipt" below to scan purchases into your materials list.'],
-        2: ['Be specific about what the course covers. AI can help!',
-            'Learning objectives should be measurable (e.g., "Student will identify...").',
-            'Save time: hit the purple "Generate with AI" button.'],
-        3: ['List every item and explain WHY it\'s educationally necessary.',
-            'The state wants to see the educational link, not just the item name.',
-            'Example: "Beeswax pellets — used for thermal transformation lab."'],
-        4: ['Break your course into 3 logical units.',
-            'Each unit should have a clear goal or deliverable.',
-            'Weeks can overlap — just show the progression.'],
-        5: ['Explain why this course matters for YOUR homeschool.',
-            'This is your chance to connect everything together.',
-            'The compiled PPC will reference A.R.S. §15-2402 automatically.']
-    };
+    var tips = [
+        'Tell the AI your student\'s name, subject, and grade level to start.',
+        'You can mention materials you plan to use — the AI will add justifications.',
+        'When you\'ve given enough info, the AI will suggest compiling your PPC.',
+        'Your conversation saves automatically. Come back anytime.',
+        'Need a real example? <a href="#" onclick="return showExample()" style="color:#3b82f6;">View a sample PPC</a>.'
+    ];
     var list = document.getElementById('helpTips');
-    var t = tips[cur] || tips[1];
-    list.innerHTML = t.map(function(tip) { return '<li>' + tip + '</li>'; }).join('');
+    list.innerHTML = tips.map(function(tip) { return '<li>' + tip + '</li>'; }).join('');
 }
 
 function showExample() {

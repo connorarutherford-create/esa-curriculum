@@ -1,0 +1,6 @@
+name = "esa-curriculum-ai"
+main = "worker.js"
+compatibility_date = "2025-06-30"
+
+[[ai]]
+binding = "AI"
