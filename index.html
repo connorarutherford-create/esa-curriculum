@@ -581,7 +581,7 @@ restoreDraft();
     fetch('https://api.gumroad.com/v2/licenses/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'product_id=' + encodeURIComponent('HF9Pm7TTWGckNpQQJfenw==') + '&license_key=' + encodeURIComponent(key)
+        body: 'product_id=' + encodeURIComponent('esa-curriculum-pro') + '&license_key=' + encodeURIComponent(key)
     }).then(function(r) { return r.json(); }).then(function(data) {
         if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;
@@ -606,7 +606,7 @@ function activateLicense() {
     fetch('https://api.gumroad.com/v2/licenses/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'product_id=' + encodeURIComponent('HF9Pm7TTWGckNpQQJfenw==') + '&license_key=' + encodeURIComponent(key)
+        body: 'product_id=' + encodeURIComponent('esa-curriculum-pro') + '&license_key=' + encodeURIComponent(key)
     }).then(function(r) { return r.json(); }).then(function(data) {
         if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;
@@ -739,7 +739,7 @@ function tryActivateAndGenerate() {
     fetch('https://api.gumroad.com/v2/licenses/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'product_id=' + encodeURIComponent('HF9Pm7TTWGckNpQQJfenw==') + '&license_key=' + encodeURIComponent(key)
+        body: 'product_id=' + encodeURIComponent('esa-curriculum-pro') + '&license_key=' + encodeURIComponent(key)
     }).then(function(r) { return r.json(); }).then(function(data) {
         if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;

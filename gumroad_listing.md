@@ -14,7 +14,7 @@ Stop stressing over PPCs. Generate complete scope, learning objectives, lesson p
 
 ## Perfect For
 
-- Arizona ESA parents submitting quarterly PPCs
+- Arizona ESA parents submitting PPCs
 - Homeschool co-ops managing multiple students
 - First-time ESA families who've never written a curriculum before
 
