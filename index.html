@@ -791,7 +791,15 @@ Paragraph explaining why this course is essential for homeschooling.`;
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contents: [{ parts: [{ text: aiPrompt }] }] })
     }).then(r => r.json()).then(data => {
-        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        console.log('Gemini response:', data);
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || data?.error?.message || '';
+        if (!text) {
+            btn.textContent = '❌ API error';
+            btn.disabled = false;
+            var errMsg = data?.error?.message || 'No response from Gemini. Check your API key.';
+            alert('AI generation failed: ' + errMsg);
+            return;
+        }
         const sections = text.split('---').map(s => s.trim()).filter(s => s);
         sections.forEach(s => {
             if (s.match(/^SCOPE/i)) document.getElementById('scopeOfStudy').value = s.replace(/^SCOPE:?\s*/i, '').trim();
@@ -802,9 +810,14 @@ Paragraph explaining why this course is essential for homeschooling.`;
         });
         btn.textContent = '✅ Generated';
         setTimeout(() => { btn.textContent = '✨ Generate with AI'; btn.disabled = false; }, 2000);
-        nextStep(); // Go to step 4 (materials) since scope/objectives done
-        nextStep(); // Go to step 5 (lesson plan)
-    }).catch(() => { btn.textContent = '❌ Failed'; btn.disabled = false; });
+        nextStep();
+        nextStep();
+    }).catch(function(err) {
+        console.log('Gemini error:', err);
+        btn.textContent = '❌ Failed';
+        btn.disabled = false;
+        alert('Network error contacting Gemini. Check your internet connection.');
+    });
 }
 
 // --- Compile ---
