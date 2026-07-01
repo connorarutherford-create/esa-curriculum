@@ -575,10 +575,27 @@ restoreDraft();
 
 // --- Pro license ---
 (function() {
-    const lic = localStorage.getItem('esa_pro_license');
-    if (lic) { proEnabled = true;
+    var key = localStorage.getItem('esa_pro_license');
+    if (!key) return;
+    // Re-verify stored key
+    fetch('https://api.gumroad.com/v2/licenses/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'product_id=' + encodeURIComponent('HF9Pm7TTWGckNpQQJfenw==') + '&license_key=' + encodeURIComponent(key)
+    }).then(function(r) { return r.json(); }).then(function(data) {
+        if (data.success && data.purchase && !data.purchase.refunded) {
+            proEnabled = true;
+            document.getElementById('proStatus').style.display = 'none';
+            document.getElementById('proActive').style.display = 'block';
+        } else {
+            localStorage.removeItem('esa_pro_license');
+        }
+    }).catch(function() {
+        // If API is unreachable, trust the stored key
+        proEnabled = true;
         document.getElementById('proStatus').style.display = 'none';
-        document.getElementById('proActive').style.display = 'block'; }
+        document.getElementById('proActive').style.display = 'block';
+    });
 })();
 
 function activateLicense() {
@@ -593,7 +610,7 @@ function activateLicense() {
     }).then(function(r) { return r.json(); }).then(function(data) {
         if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;
-            localStorage.setItem('esa_pro_license', 'true');
+            localStorage.setItem('esa_pro_license', key);
             document.getElementById('proStatus').style.display = 'none';
             document.getElementById('proActive').style.display = 'block';
         } else {
@@ -604,7 +621,7 @@ function activateLicense() {
         var override = localStorage.getItem('esa_pro_override');
         if (override === key) {
             proEnabled = true;
-            localStorage.setItem('esa_pro_license', 'true');
+            localStorage.setItem('esa_pro_license', key);
             document.getElementById('proStatus').style.display = 'none';
             document.getElementById('proActive').style.display = 'block';
             return;
@@ -726,7 +743,7 @@ function tryActivateAndGenerate() {
     }).then(function(r) { return r.json(); }).then(function(data) {
         if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;
-            localStorage.setItem('esa_pro_license', 'true');
+            localStorage.setItem('esa_pro_license', key);
             document.getElementById('proStatus').style.display = 'none';
             document.getElementById('proActive').style.display = 'block';
             generateWithAI();
