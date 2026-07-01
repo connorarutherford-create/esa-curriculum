@@ -57,7 +57,7 @@ The information you need to gather:
 
 Keep responses concise. When you have enough information, say "I have enough to compile your PPC. Type **compile** when you're ready."`;
 
-    const model = '@hf/google/gemma-2-9b-it';
+    const model = '@hf/google/gemma-4-26b-a4b-it';
     const result = await env.AI.run(model, {
       messages: [
         { role: 'system', content: systemPrompt },
@@ -147,7 +147,7 @@ Why This is Necessary for Homeschooling
 This Parent-Provided Curriculum was prepared in accordance with A.R.S. §15-2402.
 ESA Program — School Year 2025-2026`;
 
-    const model = '@hf/google/gemma-2-9b-it';
+    const model = '@hf/google/gemma-4-26b-a4b-it';
     const result = await env.AI.run(model, {
       messages: [
         { role: 'user', content: compilePrompt }
