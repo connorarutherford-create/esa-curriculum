@@ -560,7 +560,7 @@ restoreDraft();
     fetch('https://api.gumroad.com/v2/licenses/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'product_id=' + encodeURIComponent('zzipo') + '&license_key=' + encodeURIComponent(key)
+        body: 'product_id=' + encodeURIComponent('esa-curriculum-pro') + '&license_key=' + encodeURIComponent(key)
     }).then(function(r) { return r.json(); }).then(function(data) {
         if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;
@@ -585,17 +585,20 @@ function activateLicense() {
     fetch('https://api.gumroad.com/v2/licenses/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'product_id=' + encodeURIComponent('zzipo') + '&license_key=' + encodeURIComponent(key)
+        body: 'product_id=' + encodeURIComponent('esa-curriculum-pro') + '&license_key=' + encodeURIComponent(key)
     }).then(function(r) { return r.json(); }).then(function(data) {
+        console.log('License verify response:', data);
         if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;
             localStorage.setItem('esa_pro_license', key);
             document.getElementById('proStatus').style.display = 'none';
             document.getElementById('proActive').style.display = 'block';
         } else {
-            if (btn) { btn.textContent = '✗ Invalid'; setTimeout(function() { btn.textContent = 'Activate'; btn.disabled = false; }, 2000); }
+            var reason = data.purchase ? (data.purchase.refunded ? 'Refunded' : 'Invalid') : 'No purchase found';
+            if (btn) { btn.textContent = '✗ ' + reason; setTimeout(function() { btn.textContent = 'Activate'; btn.disabled = false; }, 3000); }
         }
-    }).catch(function() {
+    }).catch(function(err) {
+        console.log('License verify error:', err);
         // Network fallback: if API unreachable, trust a stored override
         var override = localStorage.getItem('esa_pro_override');
         if (override === key) {
@@ -718,8 +721,9 @@ function tryActivateAndGenerate() {
     fetch('https://api.gumroad.com/v2/licenses/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'product_id=' + encodeURIComponent('zzipo') + '&license_key=' + encodeURIComponent(key)
+        body: 'product_id=' + encodeURIComponent('esa-curriculum-pro') + '&license_key=' + encodeURIComponent(key)
     }).then(function(r) { return r.json(); }).then(function(data) {
+        console.log('License activation:', data);
         if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;
             localStorage.setItem('esa_pro_license', key);
@@ -727,11 +731,12 @@ function tryActivateAndGenerate() {
             document.getElementById('proActive').style.display = 'block';
             generateWithAI();
         } else {
-            if (btn) { btn.textContent = '✗ Invalid'; setTimeout(function() { btn.textContent = 'Activate'; btn.disabled = false; }, 2000); }
-            if (!bottomKey) alert('Invalid license key. Check your Gumroad receipt or purchase at gumroad.com/l/esa-curriculum-pro');
+            var reason = data.purchase ? (data.purchase.refunded ? 'Refunded' : 'Invalid key') : 'No purchase found';
+            if (btn) { btn.textContent = '✗ ' + reason; setTimeout(function() { btn.textContent = 'Activate'; btn.disabled = false; }, 3000); }
+            if (!bottomKey) alert('Invalid license key. Check your Gumroad receipt.');
         }
-    }).catch(function() {
-        if (btn) { btn.textContent = '✗ Error'; setTimeout(function() { btn.textContent = 'Activate'; btn.disabled = false; }, 2000); }
+    }).catch(function(err) {
+        console.log('License activation error:', err);
         if (!bottomKey) alert('Could not reach license server. Check your internet.');
     });
 }
