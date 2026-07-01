@@ -770,7 +770,7 @@ function generateWithAI() {
     btn.textContent = '⏳ Generating...';
     btn.disabled = true;
 
-    const prompt = `Generate a Parent-Provided Curriculum for Arizona ESA. Subject: ${subj}${grade ? ', Grade ' + grade : ''}. Duration: ${dur}. Course: ${ct}. ${sn ? 'Student: ' + sn + '.' : ''}${mats.length ? ' Materials: ' + mats.join(', ') + '.' : ''}
+    const aiPrompt = `Generate a Parent-Provided Curriculum for Arizona ESA. Subject: ${subj}${grade ? ', Grade ' + grade : ''}. Duration: ${dur}. Course: ${ct}. ${sn ? 'Student: ' + sn + '.' : ''}${mats.length ? ' Materials: ' + mats.join(', ') + '.' : ''}
 
 Return exactly three sections separated by "---":
 
@@ -789,7 +789,7 @@ Paragraph explaining why this course is essential for homeschooling.`;
     fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + apiKey, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        body: JSON.stringify({ contents: [{ parts: [{ text: aiPrompt }] }] })
     }).then(r => r.json()).then(data => {
         const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
         const sections = text.split('---').map(s => s.trim()).filter(s => s);
