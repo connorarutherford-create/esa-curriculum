@@ -21,8 +21,6 @@
             line-height: 1.6;
         }
         .container { max-width: 800px; margin: 0 auto; padding: 1.5rem 2rem; }
-        .header { margin-bottom: 1rem; }
-        .header img { height: 32px; }
         h1 { font-size: 1.3rem; font-weight: 700; text-align: center; margin-bottom: 0.2rem; }
         .sub { text-align: center; font-size: 0.85rem; color: #8b8ba3; margin-bottom: 1rem; }
 
@@ -114,19 +112,13 @@
 <body>
 <div class="container">
 
-<div class="header">
-    <img src="https://connorarutherford-create.github.io/inkwell-digital/logo-ink.svg" alt="Inkwell Digital">
-</div>
-
-<img src="gumroad_cover.png" alt="ESA Curriculum Pro — AI-Powered Curriculum Builder" style="width:100%; border-radius:10px; margin-bottom:1rem; display:block;">
-
 <h1>ESA Curriculum Builder</h1>
-<p class="sub" id="stepTitle">Step 1 of 6 — Receipt</p>
+<p class="sub" id="stepTitle">Step 1 of 5 — Student & Course</p>
 
-<div style="background:rgba(59,130,246,0.03); border:1px solid rgba(59,130,246,0.06); border-radius:8px; padding:10px 14px; margin-bottom:0.8rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-    <span style="font-size:0.85rem; color:#94a3b8;">We'll guide you through each step. Your PPC will be ready in minutes.</span>
+<div style="background:rgba(59,130,246,0.03); border:1px solid rgba(59,130,246,0.06); border-radius:8px; padding:10px 14px; margin-bottom:0.8rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center;">
+    <span style="font-size:0.85rem; color:#94a3b8; text-align:center;">We'll guide you through each step. Your PPC will be ready in minutes.</span>
     <span style="font-size:0.75rem; color:#5a5a72; border:1px solid rgba(255,255,255,0.06); border-radius:4px; padding:2px 8px; white-space:nowrap;">AZ ESA compliant</span>
-    <button onclick="toggleHelp()" style="background:none; border:none; color:#6b6b83; font-size:0.8rem; cursor:pointer; padding:2px 8px; border-radius:4px; margin-left:auto;">&#10068; Help</button>
+    <button onclick="toggleHelp()" style="background:none; border:none; color:#6b6b83; font-size:0.8rem; cursor:pointer; padding:2px 8px; border-radius:4px;">&#10068; Help</button>
     <span id="draftStatus" style="font-size:0.75rem; color:#22c55e; opacity:0; transition:opacity 0.5s;">Draft saved</span>
 </div>
 
@@ -568,7 +560,7 @@ restoreDraft();
     fetch('https://api.gumroad.com/v2/licenses/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'product_id=' + encodeURIComponent('esa-curriculum-pro') + '&license_key=' + encodeURIComponent(key)
+        body: 'product_id=' + encodeURIComponent('zzipo') + '&license_key=' + encodeURIComponent(key)
     }).then(function(r) { return r.json(); }).then(function(data) {
         if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;
@@ -593,7 +585,7 @@ function activateLicense() {
     fetch('https://api.gumroad.com/v2/licenses/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'product_id=' + encodeURIComponent('esa-curriculum-pro') + '&license_key=' + encodeURIComponent(key)
+        body: 'product_id=' + encodeURIComponent('zzipo') + '&license_key=' + encodeURIComponent(key)
     }).then(function(r) { return r.json(); }).then(function(data) {
         if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;
@@ -726,7 +718,7 @@ function tryActivateAndGenerate() {
     fetch('https://api.gumroad.com/v2/licenses/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'product_id=' + encodeURIComponent('esa-curriculum-pro') + '&license_key=' + encodeURIComponent(key)
+        body: 'product_id=' + encodeURIComponent('zzipo') + '&license_key=' + encodeURIComponent(key)
     }).then(function(r) { return r.json(); }).then(function(data) {
         if (data.success && data.purchase && !data.purchase.refunded) {
             proEnabled = true;
@@ -894,6 +886,7 @@ function printPPC() {
 
 function startOver() {
     if (!confirm('Clear everything and start over?')) return;
+    localStorage.removeItem('esa_draft');
     location.reload();
 }
 
